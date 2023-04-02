@@ -3,4 +3,29 @@
     <string name="title_map">Map</string>
     <string name="title_feed">Feed</string>
     <string name="title_favorites">Favorites</string>
+    <string name="title_activity_login">Log In</string>
+    <string name="prompt_email">JHU Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Login</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="or">OR</string>
+    <string name="sign_in_with_jhed">Sign in with JHED</string>
+    <string name="first_time_user">First-time User? Sign up.</string>
+    <string name="remember_me">Remember Me?</string>
+    <string name="sign_up">Sign up</string>
+    <string name="have_an_account_sign_in">Have an Account? Sign in.</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="select_year">Select Year</string>
+    <string-array name="spinner_entries">
+        <item>Freshman</item>
+        <item>Sophomore</item>
+        <item>Junior</item>
+        <item>Senior</item>
+        <item>Graduate Student</item>
+    </string-array>
 </resources>
