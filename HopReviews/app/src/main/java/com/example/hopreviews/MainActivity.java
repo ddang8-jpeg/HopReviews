@@ -31,4 +31,5 @@ private ActivityMainBinding binding;
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
 
+
 }

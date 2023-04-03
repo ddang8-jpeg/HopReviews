@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">HopReviews</string>
+
+    <string name="maps_api_key">AIzaSyDAIIV6d2EkMt478lJMnhUuU8-dS1sAZj0</string>
+
     <string name="title_map">Map</string>
     <string name="title_feed">Feed</string>
     <string name="title_favorites">Favorites</string>

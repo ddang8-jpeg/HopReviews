@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
             setResult(Activity.RESULT_OK);
 
             //Complete and destroy login activity once successful
-            finish();
+            loginSuccess();
         });
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
@@ -129,5 +129,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    }
+
+    public void loginSuccess() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }
