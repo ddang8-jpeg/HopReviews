@@ -24,6 +24,12 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="select_year">Select Year</string>
+    <string name="dining_halls">Dining Halls</string>
+    <string name="recreation">Recreation</string>
+    <string name="restaurants">Restaurants</string>
+    <string name="study">Study</string>
+    <string name="bars">Bars</string>
+    <string name="profile">Profile</string>
     <string-array name="spinner_entries">
         <item>Freshman</item>
         <item>Sophomore</item>
