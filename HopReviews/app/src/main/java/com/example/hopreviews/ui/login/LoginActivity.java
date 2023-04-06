@@ -2,32 +2,32 @@ package com.example.hopreviews.ui.login;
 
 import android.app.Activity;
 
-import androidx.lifecycle.Observer;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hopreviews.MainActivity;
 import com.example.hopreviews.R;
-import com.example.hopreviews.ui.login.LoginViewModel;
-import com.example.hopreviews.ui.login.LoginViewModelFactory;
 import com.example.hopreviews.databinding.ActivityLoginBinding;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
@@ -110,8 +110,33 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(v -> {
             loadingProgressBar.setVisibility(View.VISIBLE);
-            loginViewModel.login(usernameEditText.getText().toString(),
-                    passwordEditText.getText().toString());
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference ref = database.getReference("users");
+            String username = usernameEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
+            String encoded = encodeEmail(username);
+            ref.child(encoded).child("password").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String pw = snapshot.getValue(String.class);
+                    if (pw != null) {
+                        if (pw.equals(password)) {
+                            loginViewModel.login(username, password);
+                        } else {
+                            loadingProgressBar.setVisibility(View.INVISIBLE);
+                            Toast toast = Toast.makeText(getApplicationContext(), "Wrong password", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                    } else {
+                        loadingProgressBar.setVisibility(View.INVISIBLE);
+                        Toast toast = Toast.makeText(getApplicationContext(), "Password required", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
         });
 
         final Button signUpButton = binding.signupbutton;
@@ -122,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
+        String welcome = getString(R.string.welcome) + model.getDisplayName() + "!";
         // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
@@ -134,5 +159,11 @@ public class LoginActivity extends AppCompatActivity {
     public void loginSuccess() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
+    }
+
+    private String encodeEmail(String str) {
+        str = str.replaceAll("@", "-");
+        str = str.replaceAll("\\.", "_");
+        return str;
     }
 }
