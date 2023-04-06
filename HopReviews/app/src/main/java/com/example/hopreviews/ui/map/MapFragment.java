@@ -58,7 +58,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private static final String TAG = MapFragment.class.getSimpleName();
     private FragmentMapBinding binding;
     private static final int DEFAULT_ZOOM = 15;
-    private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
+    private final LatLng defaultLocation = new LatLng(39.3299, -76.6205);
     private PlacesClient placesClient;
     // Used for selecting the current place.
     private static final int M_MAX_ENTRIES = 5;
@@ -72,41 +72,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         MapViewModel mapViewModel =
                 new ViewModelProvider(this).get(MapViewModel.class);
 
-    binding = FragmentMapBinding.inflate(inflater, container, false);
-    View root = binding.getRoot();
+        binding = FragmentMapBinding.inflate(inflater);
+        View root = binding.getRoot();
 
-    //Initialize map Fragment
-    SupportMapFragment supportMapFragment= (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
+        //Initialize map Fragment
+        SupportMapFragment supportMapFragment= (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.requireActivity());
 
-    fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.requireActivity());
-    //Async map
-        Objects.requireNonNull(supportMapFragment).getMapAsync(googleMap -> {
-            //When map is loaded
-            googleMap.setOnMapClickListener(latLng -> {
-                //When clicked on map
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latLng);
-                //Set title to marker
-                markerOptions.title(latLng.latitude + ":" + latLng.longitude);
-                //Remove all markers
-                googleMap.clear();
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                        latLng, 10
-                ));
-                //Add marker on map
-                googleMap.addMarker(markerOptions);
-            });
-        });
-
-        // Prompt the user for permission.
-        getLocationPermission();
-
-        // Turn on the My Location layer and the related control on the map.
-        updateLocationUI();
-
-        // Get the current location of the device and set the position of the map.
-        getDeviceLocation();
-
+        Objects.requireNonNull(supportMapFragment).getMapAsync(this);
         return root;
     }
 
@@ -135,6 +108,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public View getInfoWindow(Marker arg0) {
                 return null;
             }
+        });
+
+        this.map.setOnMapClickListener(latLng -> {
+            //When clicked on map
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            //Set title to marker
+            markerOptions.title(latLng.latitude + ":" + latLng.longitude);
+            //Remove all markers
+            map.clear();
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    latLng, DEFAULT_ZOOM
+            ));
+            //Add marker on map
+            map.addMarker(markerOptions);
         });
 
         // Prompt the user for permission.

@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <item android:title="@string/dining_halls" app:showAsAction="never" />
-    <item android:title="@string/recreation" />
-    <item android:title="@string/restaurants" />
-    <item android:title="@string/study" />
-    <item android:title="@string/bars" />
+        <item android:title="@string/profile"
+            android:icon="@drawable/baseline_person_24"
+            app:showAsAction="ifRoom"
+            android:id="@+id/profile"
+            />
+    <item android:title="@string/filters">
+        <menu>
+            <item android:id="@+id/dininghalls" android:title="@string/dining_halls"/>
+            <item android:id="@+id/recreation" android:title="@string/recreation" />
+            <item android:id="@+id/restaurants" android:title="@string/restaurants" />
+            <item android:id="@+id/study" android:title="@string/study" />
+            <item android:id="@+id/bars" android:title="@string/bars" />
+        </menu>
+    </item>
+    <item android:id="@+id/signout" android:title="@string/sign_out"/>
 </menu>

@@ -30,6 +30,8 @@
     <string name="study">Study</string>
     <string name="bars">Bars</string>
     <string name="profile">Profile</string>
+    <string name="filters">Filters</string>
+    <string name="sign_out">Sign out</string>
     <string-array name="spinner_entries">
         <item>Freshman</item>
         <item>Sophomore</item>
