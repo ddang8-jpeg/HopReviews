@@ -140,10 +140,12 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         final Button signUpButton = binding.signupbutton;
-        Objects.requireNonNull(signUpButton).setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
-            startActivity(intent);
-        });
+        if (signUpButton != null) {
+            signUpButton.setOnClickListener(v -> {
+                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+                startActivity(intent);
+            });
+        }
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
