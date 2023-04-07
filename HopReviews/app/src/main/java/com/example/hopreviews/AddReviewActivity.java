@@ -28,6 +28,7 @@ public class AddReviewActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("Add Review for " + getIntent().getStringExtra("name"));
         }
         Button button = findViewById(R.id.post);
         EditText reviewText = findViewById(R.id.reviewText);
@@ -42,6 +43,7 @@ public class AddReviewActivity extends AppCompatActivity {
             }
             String username = getIntent().getStringExtra("username");
             ref.child(encodeEmail(username)).setValue(review);
+            this.finish();
         });
     }
 

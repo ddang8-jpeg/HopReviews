@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.hopreviews.databinding.ActivityLocationBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -49,7 +50,7 @@ public class LocationActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         ref = database.getReference("reviews");
         listView = (ListView) binding.reviewlist;
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(LocationActivity.this, android.R.layout.simple_list_item_1, reviews);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(LocationActivity.this, android.R.layout.simple_list_item_1, reviews);
         ref.child(getIntent().getStringExtra("name")).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -86,9 +87,7 @@ public class LocationActivity extends AppCompatActivity {
             intent.putExtra("username", getIntent().getStringExtra("username"));
             startActivity(intent);
         });
-        System.out.println("here");
         listView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
     }
 
     @Override
