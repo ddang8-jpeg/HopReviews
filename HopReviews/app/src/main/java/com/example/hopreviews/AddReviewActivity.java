@@ -6,9 +6,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.hopreviews.databinding.ActivityAddReviewBinding;
 import com.example.hopreviews.databinding.ActivityProfileBinding;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.ktx.Firebase;
 
 public class AddReviewActivity extends AppCompatActivity {
     ActivityAddReviewBinding binding;
@@ -22,11 +29,31 @@ public class AddReviewActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        Button button = findViewById(R.id.post);
+        EditText reviewText = findViewById(R.id.reviewText);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("reviews").child(getIntent().getStringExtra("name"));
+        button.setOnClickListener(v -> {
+            String review = reviewText.getText().toString();
+            if (review == null || review.isEmpty()) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Review is empty.", Toast.LENGTH_SHORT);
+                toast.show();
+                return;
+            }
+            String username = getIntent().getStringExtra("username");
+            ref.child(encodeEmail(username)).setValue(review);
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         this.finish();
         return super.onOptionsItemSelected(item);
+    }
+
+    private String encodeEmail(String str) {
+        str = str.replaceAll("@", "-");
+        str = str.replaceAll("\\.", "_");
+        return str;
     }
 }

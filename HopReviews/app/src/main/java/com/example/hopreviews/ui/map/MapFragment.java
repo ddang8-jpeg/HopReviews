@@ -338,6 +338,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public boolean onMarkerClick(@NonNull Marker marker) {
         Intent intent = new Intent(getActivity(), LocationActivity.class);
         intent.putExtra("name", marker.getTitle());
+        intent.putExtra("username", getActivity().getIntent().getStringExtra("username"));
         intent.putExtra("location", marker.getPosition());
         startActivity(intent);
         return true;

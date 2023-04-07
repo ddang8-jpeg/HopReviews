@@ -160,6 +160,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void loginSuccess() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("username", binding.username.getText().toString());
         startActivity(intent);
     }
 
