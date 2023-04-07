@@ -1,6 +1,7 @@
 package com.example.hopreviews.ui.map;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -8,16 +9,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.hopreviews.LocationActivity;
 import com.example.hopreviews.R;
 import com.example.hopreviews.databinding.FragmentMapBinding;
 
@@ -42,6 +41,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,7 +49,7 @@ import java.util.Objects;
     tutorial on Google Developers.
     Reference: https://developers.google.com/maps/documentation/android-sdk/current-place-tutorial
  */
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -92,38 +92,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         this.map = map;
-
-        // Use a custom info window adapter to handle multiple lines of text in the
-        // info window contents.
-        this.map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
-            @Nullable
-            @Override
-            public View getInfoContents(@NonNull Marker marker) {
-                return null;
-            }
-
-            @Override
-            // Return null here, so that getInfoContents() is called next.
-            public View getInfoWindow(Marker arg0) {
-                return null;
-            }
-        });
-
-        this.map.setOnMapClickListener(latLng -> {
-            //When clicked on map
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng);
-            //Set title to marker
-            markerOptions.title(latLng.latitude + ":" + latLng.longitude);
-            //Remove all markers
-            map.clear();
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    latLng, DEFAULT_ZOOM
-            ));
-            //Add marker on map
-            map.addMarker(markerOptions);
-        });
+        populateLocations();
 
         // Prompt the user for permission.
         getLocationPermission();
@@ -280,9 +249,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
             // Add a default marker, because the user hasn't selected a place.
             map.addMarker(new MarkerOptions()
-                    .title("Sydney, Australia")
+                    .title("Baltimore, MD")
                     .position(defaultLocation)
-                    .snippet("Sydney"));
+                    .snippet("Hopkins"));
 
             // Prompt the user for permission.
             getLocationPermission();
@@ -318,5 +287,59 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 .setTitle("Pick a Place")
                 .setItems(likelyPlaceNames, listener)
                 .show();
+    }
+
+    private void populateLocations() {
+        HashMap<String, LatLng> locations = new HashMap<>(30);
+        locations.put("Hopkins Cafe (FFC)", new LatLng(39.3315439,-76.6545846));
+        locations.put("Nolan's Cafe", new LatLng(39.3285221,-76.6208677));
+        locations.put("Levering Kitchens", new LatLng(39.3280526,-76.623878));
+        locations.put("Charles Street Market", new LatLng(39.3289419,-76.6217044));
+        locations.put("Brody Reading Room", new LatLng(39.328771, -76.620849));
+        locations.put("Brody Atrium", new LatLng(39.3283917,-76.6216387));
+        locations.put("Gilman Atrium", new LatLng(39.3311063,-76.664577));
+
+        locations.put("R House", new LatLng(39.326969, -76.632803));
+        locations.put("Papermoon Diner", new LatLng(39.326197, -76.616946));
+        locations.put("Power Plant Live", new LatLng(39.285738, -76.613861));
+        locations.put("National Aquarium", new LatLng(39.285766, -76.608747));
+        locations.put("Clavel", new LatLng(39.315469, -76.616995));
+        locations.put("Tagliata", new LatLng(39.2843976,-76.6018807));
+        locations.put("The Charmery", new LatLng(39.3311116,-76.6317462));
+        locations.put("Mona's", new LatLng(39.278958, -76.593761));
+        locations.put("Barcocina", new LatLng(39.283424, -76.593333));
+        locations.put("Miss Shirley's Cafe", new LatLng(39.278944, -76.580202));
+        locations.put("Ekiben", new LatLng(39.310725, -76.619014));
+        locations.put("Blue Moon Cafe", new LatLng(39.290392, -76.609456));
+        locations.put("Topgolf", new LatLng(39.201857, -76.819995));
+        locations.put("Maryland Zoo", new LatLng(39.324416, -76.647179));
+        locations.put("Federal Hill Park", new LatLng(39.276755, -76.610528));
+        locations.put("Monarque", new LatLng(39.294983, -76.613691));
+        locations.put("Wayward Smokehouse", new LatLng(39.280371, -76.585566));
+        locations.put("Noble's Bar and Grill", new LatLng(39.278948, -76.580187));
+        locations.put("The Admiral's Cup", new LatLng(39.283466, -76.59353));
+        locations.put("Kong Pocha", new LatLng(39.3124143,-76.61941));
+        locations.put("Jong Kak", new LatLng(39.284554, -76.593637));
+        locations.put("The Cheesecake Factory", new LatLng(39.290149, -76.616827));
+        locations.put("The Bygone", new LatLng(39.28437, -76.609327));
+        for (String location: locations.keySet()) {
+            MarkerOptions marker = new MarkerOptions()
+                    .title(location)
+                    .position(locations.get(location));
+            this.map.addMarker(marker);
+            this.map.setOnMarkerClickListener(marker1 -> {
+                onMarkerClick(marker1);
+                return true;
+            });
+        }
+    }
+
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        Intent intent = new Intent(getActivity(), LocationActivity.class);
+        intent.putExtra("name", marker.getTitle());
+        intent.putExtra("location", marker.getPosition());
+        startActivity(intent);
+        return true;
     }
 }

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.hopreviews.databinding.ActivityProfileBinding;
-import com.example.hopreviews.databinding.ActivitySignUpBinding;
 
 public class ProfileActivity extends AppCompatActivity {
     private ActivityProfileBinding binding;
