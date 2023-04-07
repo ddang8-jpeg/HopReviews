@@ -3,11 +3,15 @@ package com.example.hopreviews;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.hopreviews.databinding.ActivityLocationBinding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -15,9 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class LocationActivity extends AppCompatActivity {
 
@@ -30,16 +33,17 @@ public class LocationActivity extends AppCompatActivity {
 
         binding = ActivityLocationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        getSupportActionBar().setTitle(getIntent().getStringExtra("name"));
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(getIntent().getStringExtra("name"));
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("reviews");
-        HashMap<String, List<String>> reviews = new HashMap<>();
         ref.child(getIntent().getStringExtra("name")).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<String> reviews = collectReviews((Map<String, Object>) snapshot.getValue());
-                ArrayAdapter adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.activity_location, reviews);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.activity_location, reviews);
                 ListView listView = (ListView) findViewById(R.id.reviewlist);
                 listView.setAdapter(adapter);
             }
@@ -47,6 +51,16 @@ public class LocationActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), AddReviewActivity.class);
+                intent.putExtra("name", getIntent().getStringExtra("name"));
+                startActivity(intent);
             }
         });
 
@@ -62,4 +76,11 @@ public class LocationActivity extends AppCompatActivity {
         }
         return revs;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        this.finish();
+        return super.onOptionsItemSelected(item);
+    }
+
 }
