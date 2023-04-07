@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.hopreviews.databinding.ActivityAddReviewBinding;
@@ -42,7 +43,7 @@ public class AddReviewActivity extends AppCompatActivity {
                 return;
             }
             String username = getIntent().getStringExtra("username");
-            ref.child(encodeEmail(username)).setValue(review);
+            ref.child(encodeEmail(username)).child(String.valueOf(System.currentTimeMillis())).setValue(review);
             this.finish();
         });
     }

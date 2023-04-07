@@ -7,10 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.hopreviews.databinding.ActivityLocationBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -19,12 +17,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.ktx.Firebase;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Objects;
 
 public class LocationActivity extends AppCompatActivity {
 
@@ -54,7 +49,10 @@ public class LocationActivity extends AppCompatActivity {
         ref.child(getIntent().getStringExtra("name")).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                reviews.add(snapshot.getValue(String.class));
+                Map<String, String> map = (Map<String, String>) snapshot.getValue();
+                for (String timestamp: map.keySet()) {
+                    reviews.add(map.get((String) timestamp));
+                }
                 adapter.notifyDataSetChanged();
             }
 
@@ -65,7 +63,9 @@ public class LocationActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                reviews.remove(snapshot.getValue(String.class));
+                for (Object timestamp: snapshot.getValue(Map.class).entrySet()) {
+                    reviews.remove((String) snapshot.getValue(Map.class).get((String) timestamp));
+                }
                 adapter.notifyDataSetChanged();
             }
 
