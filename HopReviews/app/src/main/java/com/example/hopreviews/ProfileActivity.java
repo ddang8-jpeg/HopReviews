@@ -15,8 +15,6 @@ import com.example.hopreviews.databinding.ActivityProfileBinding;
 
 public class ProfileActivity extends AppCompatActivity {
     private ActivityProfileBinding binding;
-    private ImageView editProfileIcon;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,13 +24,6 @@ public class ProfileActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-//        editProfileIcon = findViewById(R.id.edit_profile);
-//        editProfileIcon.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startEditProfileActivity();
-//            }
-//        });
     }
 
     @Override
@@ -51,10 +42,5 @@ public class ProfileActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void startEditProfileActivity() {
-        Intent intent = new Intent(this, EditProfileActivity.class);
-        startActivity(intent);
     }
 }
