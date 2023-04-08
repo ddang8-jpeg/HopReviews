@@ -25,18 +25,12 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.edit_profile, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.edit_profile) {
-            Intent intent = new Intent(this, EditProfileActivity.class);
-            startActivity(intent);
-            return true;
-        }
+        this.finish();
         return super.onOptionsItemSelected(item);
     }
 }

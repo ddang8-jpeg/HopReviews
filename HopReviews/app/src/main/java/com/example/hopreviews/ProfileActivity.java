@@ -40,6 +40,8 @@ public class ProfileActivity extends AppCompatActivity {
             Intent intent = new Intent(this, EditProfileActivity.class);
             startActivity(intent);
             return true;
+        } else {
+            this.finish();
         }
         return super.onOptionsItemSelected(item);
     }

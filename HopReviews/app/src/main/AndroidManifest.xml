@@ -27,6 +27,10 @@
             android:exported="false"
             android:label="@string/profile" />
         <activity
+            android:name=".EditProfileActivity"
+            android:exported="false"
+            android:label="@string/edit_profile" />
+        <activity
             android:name=".ui.login.SignUpActivity"
             android:exported="false"
             android:label="@string/sign_up" />
