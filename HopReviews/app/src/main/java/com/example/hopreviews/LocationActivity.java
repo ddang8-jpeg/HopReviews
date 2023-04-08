@@ -24,7 +24,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class LocationActivity extends AppCompatActivity {
 
@@ -105,14 +108,21 @@ public class LocationActivity extends AppCompatActivity {
     private void initializeList() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         ref = database.getReference("reviews");
-        listView = (ListView) binding.reviewlist;
+        listView = binding.reviewlist;
         adapter = new ArrayAdapter<>(LocationActivity.this, android.R.layout.simple_list_item_1, reviews);
         ref.child(getIntent().getStringExtra("name")).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Map<String, String> map = (Map<String, String>) snapshot.getValue();
-                for (String timestamp: map.keySet()) {
-                    reviews.add(map.get((String) timestamp));
+                TreeMap<String, String> sorted = new TreeMap<>();
+                sorted.putAll(map);
+                ArrayList<String> sortedKeys = new ArrayList<>(sorted.keySet());
+                Collections.reverse(sortedKeys);
+                if (map != null) {
+                    for (String timestamp: sortedKeys) {
+                        String item = createListItem(snapshot.getKey(), timestamp, map.get(timestamp));
+                        reviews.add(item);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -124,10 +134,7 @@ public class LocationActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                for (Object timestamp: snapshot.getValue(Map.class).entrySet()) {
-                    reviews.remove((String) snapshot.getValue(Map.class).get((String) timestamp));
-                }
-                adapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -149,6 +156,21 @@ public class LocationActivity extends AppCompatActivity {
             startActivityForResult(intent, 0);
         });
         listView.setAdapter(adapter);
+    }
+
+    private String createListItem(String username, String timestamp, String review) {
+        Date date = new Date(Long.parseLong(timestamp));
+        return "\nUsername: " + decodeEmail(username) + "\n\nReview: " + review +
+                "\n\nDate Posted: " + date.toLocaleString() + "\n";
+    }
+
+    private String decodeEmail(String str) {
+        if (str == null || str.isEmpty()) {
+            return "Anonymous User";
+        }
+        str = str.replaceAll("-", "@");
+        str = str.replaceAll("_", ".");
+        return str;
     }
 
     @Override
