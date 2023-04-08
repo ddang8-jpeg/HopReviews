@@ -27,6 +27,7 @@ public class LocationActivity extends AppCompatActivity {
     private ListView listView;
     ArrayList<String> reviews;
     DatabaseReference ref;
+    ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class LocationActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         ref = database.getReference("reviews");
         listView = (ListView) binding.reviewlist;
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(LocationActivity.this, android.R.layout.simple_list_item_1, reviews);
+        adapter = new ArrayAdapter<>(LocationActivity.this, android.R.layout.simple_list_item_1, reviews);
         ref.child(getIntent().getStringExtra("name")).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -85,7 +86,7 @@ public class LocationActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), AddReviewActivity.class);
             intent.putExtra("name", getIntent().getStringExtra("name"));
             intent.putExtra("username", getIntent().getStringExtra("username"));
-            startActivity(intent);
+            startActivityForResult(intent, 0);
         });
         listView.setAdapter(adapter);
     }
@@ -94,6 +95,18 @@ public class LocationActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         this.finish();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+       super.onActivityResult(requestCode, resultCode, data);
+       if (resultCode == 1) {
+           return;
+       } else if (resultCode == 0) {
+           String newReview = data.getStringExtra("newlyadded");
+           reviews.add(newReview);
+           adapter.notifyDataSetChanged();
+       }
     }
 
 }

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,12 +45,16 @@ public class AddReviewActivity extends AppCompatActivity {
             }
             String username = getIntent().getStringExtra("username");
             ref.child(encodeEmail(username)).child(String.valueOf(System.currentTimeMillis())).setValue(review);
+            Intent intent = new Intent();
+            intent.putExtra("newlyadded", review);
+            setResult(0, intent);
             this.finish();
         });
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        setResult(1);
         this.finish();
         return super.onOptionsItemSelected(item);
     }
