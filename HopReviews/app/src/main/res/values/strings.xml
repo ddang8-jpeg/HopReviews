@@ -52,4 +52,5 @@
     <string name="post_review">Post Review</string>
     <string name="write_your_review_here">Write Your Review Here</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="add_to_favorite">Add to Favorite</string>
 </resources>

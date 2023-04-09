@@ -3,16 +3,16 @@ package com.example.hopreviews;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hopreviews.databinding.ActivityLocationBinding;
@@ -200,7 +200,23 @@ public class LocationActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.add_favorite, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.add_to_favorite) {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference ref = database.getReference("users");
+            ref.child(encodeEmail(getIntent().getStringExtra("username"))).child("favorites")
+                    .child(getIntent().getStringExtra("name")).setValue(true);
+            Toast.makeText(this, "Successfully added to favorites", Toast.LENGTH_SHORT).show();
+            findViewById(R.id.add_to_favorite).setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.baseline_star_24));
+            return true;
+        }
         this.finish();
         return super.onOptionsItemSelected(item);
     }
