@@ -22,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class SignUpActivity extends AppCompatActivity {
 
     private ActivitySignUpBinding binding;
-    private SharedPreferences sharedPreferences;
+//    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class SignUpActivity extends AppCompatActivity {
         final Spinner year = binding.spinner;
         final EditText email = binding.email;
         final EditText password = binding.newpassword;
-        sharedPreferences = getSharedPreferences("email", Context.MODE_PRIVATE);
+//        sharedPreferences = getSharedPreferences("email", Context.MODE_PRIVATE);
 
 
         Button signUp = binding.signup;
@@ -70,9 +70,9 @@ public class SignUpActivity extends AppCompatActivity {
                             ref.child(em).child("year").setValue(yr);
                             ref.child(em).child("email").setValue(emOriginal);
                             ref.child(em).child("password").setValue(pw);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("email", emOriginal);
-                            editor.apply();
+//                            SharedPreferences.Editor editor = sharedPreferences.edit();
+//                            editor.putString("email", emOriginal);
+//                            editor.apply();
                             Toast toast = Toast.makeText(getApplicationContext(), "Sign up successful!", Toast.LENGTH_SHORT);
                             toast.show();
                         } else {

@@ -5,7 +5,9 @@ import android.app.Activity;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.StringRes;
@@ -36,6 +38,8 @@ public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
 
+    private SharedPreferences sharedPreferences;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
+        sharedPreferences = getSharedPreferences("email", Context.MODE_PRIVATE);
 
         loginViewModel.getLoginFormState().observe(this, loginFormState -> {
             if (loginFormState == null) {
@@ -122,6 +127,9 @@ public class LoginActivity extends AppCompatActivity {
                     if (pw != null) {
                         if (pw.equals(password)) {
                             loginViewModel.login(username, password);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("email", username);
+                            editor.apply();
                         } else {
                             loadingProgressBar.setVisibility(View.INVISIBLE);
                             Toast toast = Toast.makeText(getApplicationContext(), "Wrong password", Toast.LENGTH_SHORT);
