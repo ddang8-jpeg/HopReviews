@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.hopreviews.databinding.ActivityLocationBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -26,7 +27,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class LocationActivity extends AppCompatActivity {
@@ -37,8 +40,8 @@ public class LocationActivity extends AppCompatActivity {
     DatabaseReference ref;
     DatabaseReference likesRef;
     ArrayAdapter<String> adapter;
-    private Long likes;
-    private  Long dislikes;
+    Set<String> likes;
+    Set<String> dislikes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,17 +66,23 @@ public class LocationActivity extends AppCompatActivity {
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                likes = snapshot.child("likes").getValue(Long.class);
-                dislikes = snapshot.child("dislikes").getValue(Long.class);
+                Map<String, String> mapLikes = (Map<String, String>) snapshot.child("likes").getValue();
+                Map<String, String> mapDislikes = (Map<String, String>) snapshot.child("dislikes").getValue();
+                if (mapLikes != null) {
+                    likes = mapLikes.keySet();
+                }
+                if (mapDislikes != null) {
+                    dislikes = mapDislikes.keySet();
+                }
                 if (likes == null) {
                     likesBtn.setText("Likes: 0");
                 } else {
-                    likesBtn.setText("Likes: " + likes);
+                    likesBtn.setText("Likes: " + likes.size());
                 }
                 if (dislikes == null) {
                     dislikesBtn.setText("Dislikes: 0");
                 } else {
-                    dislikesBtn.setText("Dislikes: " + dislikes);
+                    dislikesBtn.setText("Dislikes: " + dislikes.size());
                 }
             }
             @Override
@@ -82,25 +91,27 @@ public class LocationActivity extends AppCompatActivity {
                 Log.w("loadPost:onCancelled", databaseError.toException());
             }
         };
-
-        likesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (likes != null) {
-                    likesRef.child("likes").setValue(likes + 1);
+        String encodedUser = encodeEmail(getIntent().getStringExtra("username"));
+        likesBtn.setOnClickListener(view -> {
+            if (likes != null) {
+                if (likesRef.child("likes").child(encodedUser) != null) {
+                    likesRef.child("likes").child(encodedUser).setValue(1);
                 } else {
-                    likesRef.child("likes").setValue(1);
+                    likesRef.child("likes").child(encodedUser).removeValue();
                 }
+            } else if (likes == null) {
+                likesRef.child("likes").child(encodedUser).setValue(1);
             }
         });
-        dislikesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (dislikes != null) {
-                    likesRef.child("dislikes").setValue(dislikes + 1);
+        dislikesBtn.setOnClickListener(view -> {
+            if (likes != null) {
+                if (likesRef.child("dislikes").child(encodedUser) != null) {
+                    likesRef.child("dislikes").child(encodedUser).setValue(1);
                 } else {
-                    likesRef.child("dislikes").setValue(1);
+                    likesRef.child("dislikes").child(encodedUser).removeValue();
                 }
+            } else if (likes == null) {
+                likesRef.child("dislikes").child(encodedUser).setValue(1);
             }
         });
         likesRef.addValueEventListener(listener);
@@ -114,9 +125,14 @@ public class LocationActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Map<String, String> map = (Map<String, String>) snapshot.getValue();
-                TreeMap<String, String> sorted = new TreeMap<>();
-                sorted.putAll(map);
-                ArrayList<String> sortedKeys = new ArrayList<>(sorted.keySet());
+                TreeMap<String, String> sorted = null;
+                if (map != null) {
+                    sorted = new TreeMap<>(map);
+                }
+                ArrayList<String> sortedKeys = null;
+                if (sorted != null) {
+                    sortedKeys = new ArrayList<>(sorted.keySet());
+                }
                 Collections.reverse(sortedKeys);
                 if (map != null) {
                     for (String timestamp: sortedKeys) {
@@ -162,6 +178,12 @@ public class LocationActivity extends AppCompatActivity {
         Date date = new Date(Long.parseLong(timestamp));
         return "\nUsername: " + decodeEmail(username) + "\n\nReview: " + review +
                 "\n\nDate Posted: " + date.toLocaleString() + "\n";
+    }
+
+    private String encodeEmail(String str) {
+        str = str.replaceAll("@", "-");
+        str = str.replaceAll("\\.", "_");
+        return str;
     }
 
     private String decodeEmail(String str) {
