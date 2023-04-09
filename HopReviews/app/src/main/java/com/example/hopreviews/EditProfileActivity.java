@@ -8,13 +8,14 @@ import android.view.MenuItem;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.hopreviews.databinding.ActivityEditProfileBinding;
 import com.example.hopreviews.databinding.ActivityProfileBinding;
 
 public class EditProfileActivity extends AppCompatActivity {
-    private ActivityProfileBinding binding;
+    private ActivityEditProfileBinding binding;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityProfileBinding.inflate(getLayoutInflater());
+        binding = ActivityEditProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

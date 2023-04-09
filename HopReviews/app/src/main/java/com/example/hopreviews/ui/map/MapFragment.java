@@ -292,9 +292,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void populateLocations() {
         HashMap<String, LatLng> locations = new HashMap<>(30);
-        locations.put("Hopkins Cafe (FFC)", new LatLng(39.3315439,-76.6545846));
-        locations.put("Nolan's Cafe", new LatLng(39.3285221,-76.6208677));
-        locations.put("Levering Kitchens", new LatLng(39.3280526,-76.623878));
+        locations.put("Hopkins Cafe (FFC)", new LatLng(39.331610268771605, -76.6195978883285));
+        locations.put("Nolan's Cafe", new LatLng(39.3283984802178, -76.61654356473828));
+        locations.put("Levering Kitchens", new LatLng(39.32789682363558, -76.62178585228017));
         locations.put("Charles Street Market", new LatLng(39.32898418675939, -76.61721996854631));
         locations.put("Brody Reading Room", new LatLng(39.32835813777735, -76.61932382677452));
         locations.put("Brody Atrium", new LatLng(39.328462865692046, -76.61945594021617));
