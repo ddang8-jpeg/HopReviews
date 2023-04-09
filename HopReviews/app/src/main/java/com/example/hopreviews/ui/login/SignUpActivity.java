@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.hopreviews.R;
 import com.example.hopreviews.databinding.ActivitySignUpBinding;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -51,7 +52,10 @@ public class SignUpActivity extends AppCompatActivity {
 
             if (!fn.isEmpty() && !ln.isEmpty() && !yr.isEmpty() && !em.isEmpty() && !pw.isEmpty()) {
                 if (!isUserNameValid(emOriginal)) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Email must end with @jhu.edu", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(), R.string.invalid_username, Toast.LENGTH_SHORT);
+                    toast.show();
+                } else if (pw.length() <= 5) {
+                    Toast toast = Toast.makeText(getApplicationContext(), R.string.invalid_password, Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
                     ref.child(em).child("email").get().addOnCompleteListener(task -> {
