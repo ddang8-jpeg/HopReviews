@@ -44,9 +44,13 @@ public class AddReviewActivity extends AppCompatActivity {
                 return;
             }
             String username = getIntent().getStringExtra("username");
-            ref.child(encodeEmail(username)).child(String.valueOf(System.currentTimeMillis())).setValue(review);
+            String timestamp = String.valueOf(System.currentTimeMillis());
+
+            ref.child(encodeEmail(username)).child(timestamp).setValue(review);
             Intent intent = new Intent();
+            intent.putExtra("username", username);
             intent.putExtra("newlyadded", review);
+            intent.putExtra("timestamp", timestamp);
             setResult(0, intent);
             this.finish();
         });

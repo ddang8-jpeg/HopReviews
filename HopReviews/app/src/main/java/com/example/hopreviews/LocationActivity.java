@@ -227,8 +227,12 @@ public class LocationActivity extends AppCompatActivity {
        if (resultCode == 1) {
            return;
        } else if (resultCode == 0) {
+           String newUser = data.getStringExtra("username");
+           String newTime = data.getStringExtra("timestamp");
            String newReview = data.getStringExtra("newlyadded");
-           reviews.add(newReview);
+
+           String item = createListItem(newUser, newTime, newReview);
+           reviews.add(0, item);
            adapter.notifyDataSetChanged();
        }
     }
