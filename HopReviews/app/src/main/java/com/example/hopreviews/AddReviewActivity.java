@@ -35,7 +35,7 @@ public class AddReviewActivity extends AppCompatActivity {
         Button button = findViewById(R.id.post);
         EditText reviewText = findViewById(R.id.reviewText);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("reviews").child(getIntent().getStringExtra("name"));
+        DatabaseReference ref = database.getReference("locations").child(getIntent().getStringExtra("name")).child("reviews");
         button.setOnClickListener(v -> {
             String review = reviewText.getText().toString();
             if (review == null || review.isEmpty()) {

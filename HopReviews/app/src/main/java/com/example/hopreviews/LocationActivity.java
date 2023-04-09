@@ -60,7 +60,7 @@ public class LocationActivity extends AppCompatActivity {
     }
     private void initializeLikes() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        likesRef = database.getReference("likes").child(getIntent().getStringExtra("name"));
+        likesRef = database.getReference("locations").child(getIntent().getStringExtra("name"));
         Button likesBtn = (Button) binding.likesBtn;
         Button dislikesBtn = (Button) binding.dislikesBtn;
         ValueEventListener listener = new ValueEventListener() {
@@ -122,10 +122,10 @@ public class LocationActivity extends AppCompatActivity {
     }
     private void initializeList() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        ref = database.getReference("reviews");
+        ref = database.getReference("locations");
         listView = binding.reviewlist;
         adapter = new ArrayAdapter<>(LocationActivity.this, android.R.layout.simple_list_item_1, reviews);
-        ref.child(getIntent().getStringExtra("name")).addChildEventListener(new ChildEventListener() {
+        ref.child(getIntent().getStringExtra("name")).child("reviews").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Map<String, String> map = (Map<String, String>) snapshot.getValue();
