@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.MenuItem;
@@ -20,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class SignUpActivity extends AppCompatActivity {
 
     private ActivitySignUpBinding binding;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,8 @@ public class SignUpActivity extends AppCompatActivity {
         final Spinner year = binding.spinner;
         final EditText email = binding.email;
         final EditText password = binding.newpassword;
+        sharedPreferences = getSharedPreferences("email", Context.MODE_PRIVATE);
+
 
         Button signUp = binding.signup;
 
@@ -65,6 +70,9 @@ public class SignUpActivity extends AppCompatActivity {
                             ref.child(em).child("year").setValue(yr);
                             ref.child(em).child("email").setValue(emOriginal);
                             ref.child(em).child("password").setValue(pw);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("email", emOriginal);
+                            editor.apply();
                             Toast toast = Toast.makeText(getApplicationContext(), "Sign up successful!", Toast.LENGTH_SHORT);
                             toast.show();
                         } else {
