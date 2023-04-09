@@ -40,8 +40,8 @@ public class LocationActivity extends AppCompatActivity {
     DatabaseReference ref;
     DatabaseReference likesRef;
     ArrayAdapter<String> adapter;
-    Set<String> likes;
-    Set<String> dislikes;
+    Set<String> likes = new HashSet<>();
+    Set<String> dislikes = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,24 +66,24 @@ public class LocationActivity extends AppCompatActivity {
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Map<String, String> mapLikes = (Map<String, String>) snapshot.child("likes").getValue();
-                Map<String, String> mapDislikes = (Map<String, String>) snapshot.child("dislikes").getValue();
+                Map<String, Long> mapLikes = (Map<String, Long>) snapshot.child("likes").getValue();
+                Map<String, Long> mapDislikes = (Map<String, Long>) snapshot.child("dislikes").getValue();
                 if (mapLikes != null) {
-                    likes = mapLikes.keySet();
+                    for (String user: mapLikes.keySet()) {
+                        if (mapLikes.get(user) == 1) {
+                            likes.add(user);
+                        }
+                    }
                 }
                 if (mapDislikes != null) {
-                    dislikes = mapDislikes.keySet();
+                    for (String user: mapDislikes.keySet()) {
+                        if (mapDislikes.get(user) == 1) {
+                            dislikes.add(user);
+                        }
+                    }
                 }
-                if (likes == null) {
-                    likesBtn.setText("Likes: 0");
-                } else {
-                    likesBtn.setText("Likes: " + likes.size());
-                }
-                if (dislikes == null) {
-                    dislikesBtn.setText("Dislikes: 0");
-                } else {
-                    dislikesBtn.setText("Dislikes: " + dislikes.size());
-                }
+                likesBtn.setText("Likes: " + likes.size());
+                dislikesBtn.setText("Dislikes: " + dislikes.size());
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -93,25 +93,29 @@ public class LocationActivity extends AppCompatActivity {
         };
         String encodedUser = encodeEmail(getIntent().getStringExtra("username"));
         likesBtn.setOnClickListener(view -> {
-            if (likes != null) {
-                if (likesRef.child("likes").child(encodedUser) != null) {
-                    likesRef.child("likes").child(encodedUser).setValue(1);
-                } else {
-                    likesRef.child("likes").child(encodedUser).removeValue();
-                }
-            } else if (likes == null) {
+            if (dislikes.contains(encodedUser)) {
+                likesRef.child("dislikes").child(encodedUser).setValue(0);
+                dislikes.remove(encodedUser);
+            }
+            if (likes.contains(encodedUser)) {
+                likesRef.child("likes").child(encodedUser).setValue(0);
+                likes.remove(encodedUser);
+            } else {
                 likesRef.child("likes").child(encodedUser).setValue(1);
+                likes.add(encodedUser);
             }
         });
         dislikesBtn.setOnClickListener(view -> {
-            if (likes != null) {
-                if (likesRef.child("dislikes").child(encodedUser) != null) {
-                    likesRef.child("dislikes").child(encodedUser).setValue(1);
-                } else {
-                    likesRef.child("dislikes").child(encodedUser).removeValue();
-                }
-            } else if (likes == null) {
+            if (likes.contains(encodedUser)) {
+                likesRef.child("likes").child(encodedUser).setValue(0);
+                likes.remove(encodedUser);
+            }
+            if (dislikes.contains(encodedUser)) {
+                likesRef.child("dislikes").child(encodedUser).setValue(0);
+                dislikes.remove(encodedUser);
+            } else {
                 likesRef.child("dislikes").child(encodedUser).setValue(1);
+                dislikes.add(encodedUser);
             }
         });
         likesRef.addValueEventListener(listener);
