@@ -128,8 +128,8 @@ public class LocationActivity extends AppCompatActivity {
         ref.child(getIntent().getStringExtra("name")).child("reviews").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Map<String, String> map = (Map<String, String>) snapshot.getValue();
-                TreeMap<String, String> sorted = null;
+                Map<String, Map<String, String>> map = (Map<String, Map<String, String>>) snapshot.getValue();
+                TreeMap<String, Map<String, String>> sorted = null;
                 if (map != null) {
                     sorted = new TreeMap<>(map);
                 }
@@ -140,8 +140,11 @@ public class LocationActivity extends AppCompatActivity {
                 Collections.reverse(sortedKeys);
                 if (map != null) {
                     for (String timestamp: sortedKeys) {
-                        String item = createListItem(snapshot.getKey(), timestamp, map.get(timestamp));
-                        reviews.add(item);
+                        if (map.get(timestamp).get("rating") != null) {
+                            String item = createListItem(snapshot.getKey(), timestamp,
+                                    map.get(timestamp).get("review"), map.get(timestamp).get("rating"));
+                            reviews.add(item);
+                        }
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -178,9 +181,9 @@ public class LocationActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
-    private String createListItem(String username, String timestamp, String review) {
+    private String createListItem(String username, String timestamp, String review, String rating) {
         Date date = new Date(Long.parseLong(timestamp));
-        return "\nUsername: " + decodeEmail(username) + "\n\nReview: " + review +
+        return "\nUsername: " + decodeEmail(username) + "\n\nRating: " + rating + "\nReview: " + review +
                 "\n\nDate Posted: " + date.toLocaleString() + "\n";
     }
 
@@ -230,8 +233,12 @@ public class LocationActivity extends AppCompatActivity {
            String newUser = data.getStringExtra("username");
            String newTime = data.getStringExtra("timestamp");
            String newReview = data.getStringExtra("newlyadded");
+           String newRating = data.getStringExtra("rating");
 
-           String item = createListItem(newUser, newTime, newReview);
+           String item = createListItem(newUser, newTime, newReview, newRating);
+           if (reviews.contains(item)) {
+               return;
+           }
            reviews.add(0, item);
            adapter.notifyDataSetChanged();
        }

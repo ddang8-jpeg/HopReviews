@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.example.hopreviews.databinding.ActivityAddReviewBinding;
@@ -33,6 +34,7 @@ public class AddReviewActivity extends AppCompatActivity {
             actionBar.setTitle("Add Review for " + getIntent().getStringExtra("name"));
         }
         Button button = findViewById(R.id.post);
+        RatingBar rb = findViewById(R.id.ratingbar);
         EditText reviewText = findViewById(R.id.reviewText);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("locations").child(getIntent().getStringExtra("name")).child("reviews");
@@ -45,12 +47,14 @@ public class AddReviewActivity extends AppCompatActivity {
             }
             String username = getIntent().getStringExtra("username");
             String timestamp = String.valueOf(System.currentTimeMillis());
-
-            ref.child(encodeEmail(username)).child(timestamp).setValue(review);
+            String rating = String.valueOf(rb.getRating());
+            ref.child(encodeEmail(username)).child(timestamp).child("review").setValue(review);
+            ref.child(encodeEmail(username)).child(timestamp).child("rating").setValue(rating);
             Intent intent = new Intent();
             intent.putExtra("username", username);
             intent.putExtra("newlyadded", review);
             intent.putExtra("timestamp", timestamp);
+            intent.putExtra("rating", rating);
             setResult(0, intent);
             this.finish();
         });

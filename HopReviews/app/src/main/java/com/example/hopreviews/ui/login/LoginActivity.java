@@ -137,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     } else {
                         loadingProgressBar.setVisibility(View.INVISIBLE);
-                        Toast toast = Toast.makeText(getApplicationContext(), "Password required", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getApplicationContext(), "User not found", Toast.LENGTH_SHORT);
                         toast.show();
                     }
                 }
