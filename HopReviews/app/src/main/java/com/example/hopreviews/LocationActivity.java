@@ -183,7 +183,7 @@ public class LocationActivity extends AppCompatActivity {
 
     private String createListItem(String username, String timestamp, String review, String rating) {
         Date date = new Date(Long.parseLong(timestamp));
-        return "\nUsername: " + decodeEmail(username) + "\n\nRating: " + rating + "\nReview: " + review +
+        return "\nUsername: " + decodeEmail(username) + "\nRating: " + rating + "/5.0\n\nReview: " + review +
                 "\n\nDate Posted: " + date.toLocaleString() + "\n";
     }
 
