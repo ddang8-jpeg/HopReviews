@@ -33,6 +33,8 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView firstLastNameText;
     private TextView yearText;
     private TextView emailText;
+
+    // TODO: refactor into an initialize method like in LocationActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,11 +55,13 @@ public class ProfileActivity extends AppCompatActivity {
                 String firstName = (String) snapshot.child("firstName").getValue();
                 String lastName = (String) snapshot.child("lastName").getValue();
                 String year = (String) snapshot.child("year").getValue();
+                String email = (String) snapshot.child("email").getValue();
                 String name = firstName + " " + lastName;
-                String final_email = userEmail + "@jhu.edu";
+                // TODO: for some reason this concatenation is not working
+                email += '@' + "jhu.edu";
                 firstLastNameText.setText(name);
                 yearText.setText(year);
-                emailText.setText(final_email);
+                emailText.setText(email);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

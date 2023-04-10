@@ -13,6 +13,7 @@
         android:layout_marginTop="44dp"
         android:ems="10"
         android:hint="@string/first_name"
+        android:textColorHint="@color/black"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,6 +27,7 @@
         android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="@string/last_name"
+        android:textColorHint="@color/black"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,9 +39,10 @@
         android:layout_width="302dp"
         android:layout_height="67dp"
         android:layout_marginTop="28dp"
+        android:textColorHint="@color/black"
         android:ems="10"
         android:hint="@string/prompt_email"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editLastName"
@@ -47,18 +50,23 @@
 
 <!--    TODO: make this a dropdown menu-->
 
-    <EditText
-        android:id="@+id/editYear"
+
+    <androidx.cardview.widget.CardView
         android:layout_width="302dp"
-        android:layout_height="88dp"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:hint="@string/select_year"
-        android:inputType="number"
+        android:layout_height="59dp"
+        app:layout_constraintBottom_toTopOf="@+id/save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editEmail"
-        android:autofillHints="no"/>
+        app:layout_constraintTop_toBottomOf="@+id/editEmail">
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="302dp"
+            android:layout_height="match_parent"
+            android:entries="@array/spinner_entries"
+            android:prompt="@string/select_year"
+            />
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/save"
@@ -72,6 +80,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editYear" />
+        app:layout_constraintTop_toTopOf="@+id/editEmail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
