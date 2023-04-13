@@ -30,9 +30,6 @@ import java.util.Map;
 public class ProfileActivity extends AppCompatActivity {
     private ActivityProfileBinding binding;
     private SharedPreferences sharedPreferences;
-    private TextView firstLastNameText;
-    private TextView yearText;
-    private TextView emailText;
 
     // TODO: refactor into an initialize method like in LocationActivity
     @Override
@@ -43,9 +40,9 @@ public class ProfileActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         sharedPreferences = getSharedPreferences("email", Context.MODE_PRIVATE);
-        firstLastNameText = findViewById(R.id.firstLastName);
-        emailText = findViewById(R.id.email);
-        yearText = findViewById(R.id.year);
+        TextView firstLastNameText = binding.firstLastName;
+        TextView yearText = binding.year;
+        TextView emailText = binding.email;
         String userEmail = sharedPreferences.getString("email", "");
         String em = encodeEmail(userEmail);
         DatabaseReference ref = database.getReference("users").child(em);
@@ -57,8 +54,6 @@ public class ProfileActivity extends AppCompatActivity {
                 String year = (String) snapshot.child("year").getValue();
                 String email = (String) snapshot.child("email").getValue();
                 String name = firstName + " " + lastName;
-                // TODO: for some reason this concatenation is not working
-                email += '@' + "jhu.edu";
                 firstLastNameText.setText(name);
                 yearText.setText(year);
                 emailText.setText(email);
