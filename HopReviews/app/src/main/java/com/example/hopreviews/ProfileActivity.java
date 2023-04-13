@@ -31,7 +31,6 @@ public class ProfileActivity extends AppCompatActivity {
     private ActivityProfileBinding binding;
     private SharedPreferences sharedPreferences;
 
-    // TODO: refactor into an initialize method like in LocationActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -36,8 +36,10 @@ public class AddReviewActivity extends AppCompatActivity {
         Button button = findViewById(R.id.post);
         RatingBar rb = findViewById(R.id.ratingbar);
         EditText reviewText = findViewById(R.id.reviewText);
+        String timestamp = String.valueOf(System.currentTimeMillis());
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("locations").child(getIntent().getStringExtra("name")).child("reviews");
+        DatabaseReference refLocations = database.getReference("locations").child(getIntent().getStringExtra("name")).child("reviews");
+        DatabaseReference refFeed = database.getReference("feed").child(timestamp);
         button.setOnClickListener(v -> {
             String review = reviewText.getText().toString();
             if (review == null || review.isEmpty()) {
@@ -46,10 +48,11 @@ public class AddReviewActivity extends AppCompatActivity {
                 return;
             }
             String username = getIntent().getStringExtra("username");
-            String timestamp = String.valueOf(System.currentTimeMillis());
             String rating = String.valueOf(rb.getRating());
-            ref.child(encodeEmail(username)).child(timestamp).child("review").setValue(review);
-            ref.child(encodeEmail(username)).child(timestamp).child("rating").setValue(rating);
+            refLocations.child(encodeEmail(username)).child(timestamp).child("review").setValue(review);
+            refLocations.child(encodeEmail(username)).child(timestamp).child("rating").setValue(rating);
+            refFeed.child(getIntent().getStringExtra("name")).child(encodeEmail(username)).child("review").setValue(review);
+            refFeed.child(getIntent().getStringExtra("name")).child(encodeEmail(username)).child("rating").setValue(rating);
             Intent intent = new Intent();
             intent.putExtra("username", username);
             intent.putExtra("newlyadded", review);
