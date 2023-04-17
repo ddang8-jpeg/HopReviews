@@ -16,8 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -31,14 +31,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Objects;
-
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
 
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences emailSharedPreferences;
+    private SharedPreferences rememberMeSharedPreferences;
+    private boolean remember;
+    private CheckBox rememberMe;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,15 +47,16 @@ public class LoginActivity extends AppCompatActivity {
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        rememberMe = findViewById(R.id.checkBox);
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
-
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
-        sharedPreferences = getSharedPreferences("email", Context.MODE_PRIVATE);
+        emailSharedPreferences = getSharedPreferences("email", Context.MODE_PRIVATE);
+        rememberMeSharedPreferences = getSharedPreferences("rememberMe", Context.MODE_PRIVATE);
+        remember = rememberMeSharedPreferences.getBoolean("rememberMe", false);
 
         loginViewModel.getLoginFormState().observe(this, loginFormState -> {
             if (loginFormState == null) {
@@ -85,6 +87,12 @@ public class LoginActivity extends AppCompatActivity {
             //Complete and destroy login activity once successful
             loginSuccess();
         });
+
+        if (remember) {
+            String user = emailSharedPreferences.getString("email", "");
+            String pw = rememberMeSharedPreferences.getString("password", "");
+            loginViewModel.login(user, pw);
+        }
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
@@ -120,9 +128,19 @@ public class LoginActivity extends AppCompatActivity {
                     if (pw != null) {
                         if (pw.equals(password)) {
                             loginViewModel.login(username, password);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            SharedPreferences.Editor editor = emailSharedPreferences.edit();
                             editor.putString("email", username);
                             editor.apply();
+                            SharedPreferences.Editor remember_editor = rememberMeSharedPreferences.edit();
+                            if (rememberMe.isChecked()) {
+                                remember_editor.putString("password", password);
+                                remember_editor.putBoolean("rememberMe", true);
+                            } else {
+                                remember_editor.putString("password", "");
+                                remember_editor.putBoolean("rememberMe", false);
+                            }
+                            remember_editor.apply();
+
                         } else {
                             loadingProgressBar.setVisibility(View.INVISIBLE);
                             Toast toast = Toast.makeText(getApplicationContext(), "Wrong password", Toast.LENGTH_SHORT);
