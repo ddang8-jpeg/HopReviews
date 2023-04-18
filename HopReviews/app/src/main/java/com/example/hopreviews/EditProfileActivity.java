@@ -64,7 +64,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 firstNameEditText.setText(fName);
                 lastNameEditText.setText(lName);
                 emailEditText.setText(registered_email);
-                // TODO: initialize spinner enmchakrastry to be current year
+                // TODO: initialize spinner to be current year
 //                spinner_entries = new
 //                        ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.spinner_entries)));
 //                spinner_entries.remove(yr);
@@ -99,6 +99,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             ref.child(em).child("year").setValue(yr);
                             Toast toast = Toast.makeText(getApplicationContext(), "Save successful!", Toast.LENGTH_SHORT);
                             toast.show();
+                            openProfileActivity();
                         } else {
                             Toast toast = Toast.makeText(getApplicationContext(), "You cannot change emails.", Toast.LENGTH_SHORT);
                             toast.show();
@@ -144,5 +145,10 @@ public class EditProfileActivity extends AppCompatActivity {
         } else {
             return !username.trim().isEmpty();
         }
+    }
+
+    public void openProfileActivity() {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
     }
 }
