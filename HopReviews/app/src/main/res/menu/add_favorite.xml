@@ -2,9 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:title="@string/add_to_favorite"
+    <item
         android:id="@+id/add_to_favorite"
+        android:checkable="true"
         android:icon="@drawable/baseline_star_outline_24"
-        app:showAsAction="ifRoom"/>
+        android:title="@string/add_to_favorite"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
 
 </menu>

@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.ktx.Firebase;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,6 +46,7 @@ public class LocationActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     Set<String> likes = new HashSet<>();
     Set<String> dislikes = new HashSet<>();
+    private boolean favorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +59,49 @@ public class LocationActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         reviews = new ArrayList<>();
-
+        favorite = false;
         initializeLikes();
         initializeList();
+    }
+
+    private void isFavorite(Menu menu) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference favRef = database.getReference("users");
+        favRef.child(encodeEmail(getIntent().getStringExtra("username"))).addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        try {
+                            Map<String, Boolean> map = (Map<String, Boolean>) snapshot.getValue();
+                            if (map.get(getIntent().getStringExtra("name"))) {
+                                System.out.println("here3");
+                                menu.getItem(0).setIcon(R.drawable.baseline_star_24);
+                                favorite = true;
+                            }
+                        } catch (Exception e) {
+
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
     private void initializeLikes() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -206,18 +251,29 @@ public class LocationActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.add_favorite, menu);
+        isFavorite(menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.add_to_favorite) {
+        if (item.getItemId() == R.id.add_to_favorite && !favorite) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference ref = database.getReference("users");
             ref.child(encodeEmail(getIntent().getStringExtra("username"))).child("favorites")
                     .child(getIntent().getStringExtra("name")).setValue(true);
             Toast.makeText(this, "Successfully added to favorites", Toast.LENGTH_SHORT).show();
-            findViewById(R.id.add_to_favorite).setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.baseline_star_24));
+            item.setIcon(R.drawable.baseline_star_24);
+            favorite = true;
+            return true;
+        } else if (item.getItemId() == R.id.add_to_favorite && favorite) {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference ref = database.getReference("users");
+            ref.child(encodeEmail(getIntent().getStringExtra("username"))).child("favorites")
+                    .child(getIntent().getStringExtra("name")).setValue(false);
+            Toast.makeText(this, "Successfully removed from favorites", Toast.LENGTH_SHORT).show();
+            item.setIcon(R.drawable.baseline_star_outline_24);
+            favorite = false;
             return true;
         }
         this.finish();

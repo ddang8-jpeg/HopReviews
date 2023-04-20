@@ -54,4 +54,5 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="add_to_favorite">Add to Favorite</string>
     <string name="my_reviews">My Reviews</string>
+    <string name="favorited">favorited</string>
 </resources>
