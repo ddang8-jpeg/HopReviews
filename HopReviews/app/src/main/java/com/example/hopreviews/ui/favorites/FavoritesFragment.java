@@ -95,6 +95,6 @@ public class FavoritesFragment extends Fragment {
     }
 
     private String createListItem(String location) {
-        return "\n"+ location + "\n";
+        return "\n" + location + "\n";
     }
 }

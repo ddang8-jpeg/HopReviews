@@ -1,9 +1,14 @@
 package com.example.hopreviews.ui.feed;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -11,6 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.example.hopreviews.LocationActivity;
+import com.example.hopreviews.MainActivity;
+import com.example.hopreviews.R;
 import com.example.hopreviews.databinding.FragmentFeedBinding;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -84,13 +93,24 @@ public class FeedFragment extends Fragment {
             }
         });
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = (String) parent.getItemAtPosition(position);
+                String location = item.split("\\s+")[1];
+                Intent intent = new Intent(getActivity(), LocationActivity.class);
+                intent.putExtra("name", location);
+                intent.putExtra("username", getActivity().getIntent().getStringExtra("username"));
+                startActivity(intent);
+            }
+        });
         return root;
     }
 
     private String createListItem(String username, String timestamp, String review, String rating, String location) {
         Date date = new Date(Long.parseLong(timestamp));
-        return "\nLocation: " + location + "\n\nUsername: " + decodeEmail(username) + "\nRating: "
-                + rating + "/5.0\n\nReview: " + review + "\n\nDate Posted: " + date.toLocaleString() + "\n";
+        return "\n" + location + "\n\nBy: " + decodeEmail(username) + "\nRating: "
+                + rating + "/5.0\n\nReview: " + review + "\n\n" + date.toLocaleString() + "\n";
     }
 
     private String decodeEmail(String str) {
