@@ -97,7 +97,7 @@ public class FeedFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) parent.getItemAtPosition(position);
-                String location = item.split("\\s+")[1];
+                String location = item.split("\n")[1];
                 Intent intent = new Intent(getActivity(), LocationActivity.class);
                 intent.putExtra("name", location);
                 intent.putExtra("username", getActivity().getIntent().getStringExtra("username"));

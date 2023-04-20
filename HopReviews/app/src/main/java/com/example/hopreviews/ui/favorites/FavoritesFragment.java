@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.hopreviews.LocationActivity;
 import com.example.hopreviews.MainActivity;
 import com.example.hopreviews.databinding.FragmentFavoritesBinding;
 import com.google.firebase.database.ChildEventListener;
@@ -79,6 +81,17 @@ public class FavoritesFragment extends Fragment {
             }
         });
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = (String) parent.getItemAtPosition(position);
+                String location = item.split("\n")[1];
+                Intent intent = new Intent(getActivity(), LocationActivity.class);
+                intent.putExtra("name", location);
+                intent.putExtra("username", getActivity().getIntent().getStringExtra("username"));
+                startActivity(intent);
+            }
+        });
         return root;
     }
 
