@@ -7,6 +7,9 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -41,6 +44,7 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +71,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private String[] likelyPlaceAddresses;
     private List[] likelyPlaceAttributions;
     private LatLng[] likelyPlaceLatLngs;
+    private ArrayList<String> filters;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
@@ -75,11 +80,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         binding = FragmentMapBinding.inflate(inflater);
         View root = binding.getRoot();
+        setHasOptionsMenu(true);
 
         //Initialize map Fragment
         SupportMapFragment supportMapFragment= (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.requireActivity());
 
+        filters = new ArrayList<>();
+        filters.add("restaurant");
+        filters.add("bar");
+        filters.add("study");
+        filters.add("dining hall");
+        filters.add("recreation");
         Objects.requireNonNull(supportMapFragment).getMapAsync(this);
         return root;
     }
@@ -291,42 +303,61 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     private void populateLocations() {
-        HashMap<String, LatLng> locations = new HashMap<>(30);
-        locations.put("Hopkins Cafe (FFC)", new LatLng(39.331610268771605, -76.6195978883285));
-        locations.put("Nolan's Cafe", new LatLng(39.3283984802178, -76.61654356473828));
-        locations.put("Levering Kitchens", new LatLng(39.32789682363558, -76.62178585228017));
-        locations.put("Charles Street Market", new LatLng(39.32898418675939, -76.61721996854631));
-        locations.put("Brody Reading Room", new LatLng(39.32835813777735, -76.61932382677452));
-        locations.put("Brody Atrium", new LatLng(39.328462865692046, -76.61945594021617));
-        locations.put("Gilman Atrium", new LatLng(39.32897433156248, -76.62180893076324));
+        HashMap<String, LatLng> studyLocs = new HashMap<>(30);
+        HashMap<String, LatLng> bars = new HashMap<>(30);
+        HashMap<String, LatLng> restaurants = new HashMap<>(30);
+        HashMap<String, LatLng> diningHalls = new HashMap<>(30);
+        HashMap<String, LatLng> recreation = new HashMap<>(30);
+        diningHalls.put("Hopkins Cafe (FFC)", new LatLng(39.331610268771605, -76.6195978883285));
+        diningHalls.put("Nolan's Cafe", new LatLng(39.3283984802178, -76.61654356473828));
+        diningHalls.put("Levering Kitchens", new LatLng(39.32789682363558, -76.62178585228017));
+        diningHalls.put("Charles Street Market", new LatLng(39.32898418675939, -76.61721996854631));
+        studyLocs.put("Brody Reading Room", new LatLng(39.32835813777735, -76.61932382677452));
+        studyLocs.put("Brody Atrium", new LatLng(39.328462865692046, -76.61945594021617));
+        studyLocs.put("Gilman Atrium", new LatLng(39.32897433156248, -76.62180893076324));
 
-        locations.put("R House", new LatLng(39.32174358987388, -76.62230796246828));
-        locations.put("Papermoon Diner", new LatLng(39.32248195852942, -76.62127504462953));
-        locations.put("Power Plant Live", new LatLng(39.28913653484303, -76.60738906961856));
-        locations.put("National Aquarium", new LatLng(39.285425995252425, -76.60840707009508));
-        locations.put("Clavel", new LatLng(39.31523919473816, -76.62044637298729));
-        locations.put("Tagliata", new LatLng(39.28466331516136, -76.59978856134195));
-        locations.put("The Charmery (Hampden)", new LatLng(39.331188763706486, -76.6295553131882));
-        locations.put("Mona's Super Noodle", new LatLng(39.3316066779916, -76.63110604362373));
-        locations.put("Barcocina", new LatLng(39.28135327202415, -76.59326884230492));
-        locations.put("Miss Shirley's Cafe, Roland Park", new LatLng(39.34464688170542, -76.63145630182196));
-        locations.put("Ekiben (Hampden)", new LatLng(39.33085205582459, -76.63176863065772));
-        locations.put("Blue Moon Cafe", new LatLng(39.28391200923804, -76.59404125084309));
-        locations.put("Topgolf", new LatLng(39.27467857352671, -76.62450354363561));
-        locations.put("Maryland Zoo", new LatLng(39.32296407007038, -76.64974522881016));
-        locations.put("Federal Hill Park", new LatLng(39.27974376855076, -76.6084331504898));
-        locations.put("Monarque", new LatLng(39.284961171885875, -76.59996477298806));
-        locations.put("Wayward Smokehouse", new LatLng(39.27944258171549, -76.61439678412442));
-        locations.put("Noble's Bar and Grill", new LatLng(39.27736983554085, -76.61453031346963));
-        locations.put("The Admiral's Cup", new LatLng(39.2817796618453, -76.59335085949435));
-        locations.put("Kong Pocha", new LatLng(39.31252219154175, -76.61723203065816));
-        locations.put("Jong Kak", new LatLng(39.312455784156505, -76.61748952270764));
-        locations.put("The Cheesecake Factory", new LatLng(39.28647488810012, -76.61014975764644));
-        locations.put("The Bygone", new LatLng(39.28288859512139, -76.60211693250669));
-        for (String location: locations.keySet()) {
+        restaurants.put("R House", new LatLng(39.32174358987388, -76.62230796246828));
+        restaurants.put("Papermoon Diner", new LatLng(39.32248195852942, -76.62127504462953));
+        bars.put("Power Plant Live", new LatLng(39.28913653484303, -76.60738906961856));
+        recreation.put("National Aquarium", new LatLng(39.285425995252425, -76.60840707009508));
+        restaurants.put("Clavel", new LatLng(39.31523919473816, -76.62044637298729));
+        restaurants.put("Tagliata", new LatLng(39.28466331516136, -76.59978856134195));
+        restaurants.put("The Charmery (Hampden)", new LatLng(39.331188763706486, -76.6295553131882));
+        restaurants.put("Mona's Super Noodle", new LatLng(39.3316066779916, -76.63110604362373));
+        restaurants.put("Barcocina", new LatLng(39.28135327202415, -76.59326884230492));
+        restaurants.put("Miss Shirley's Cafe, Roland Park", new LatLng(39.34464688170542, -76.63145630182196));
+        restaurants.put("Ekiben (Hampden)", new LatLng(39.33085205582459, -76.63176863065772));
+        restaurants.put("Blue Moon Cafe", new LatLng(39.28391200923804, -76.59404125084309));
+        recreation.put("Topgolf", new LatLng(39.27467857352671, -76.62450354363561));
+        recreation.put("Maryland Zoo", new LatLng(39.32296407007038, -76.64974522881016));
+        recreation.put("Federal Hill Park", new LatLng(39.27974376855076, -76.6084331504898));
+        restaurants.put("Monarque", new LatLng(39.284961171885875, -76.59996477298806));
+        restaurants.put("Wayward Smokehouse", new LatLng(39.27944258171549, -76.61439678412442));
+        restaurants.put("Noble's Bar and Grill", new LatLng(39.27736983554085, -76.61453031346963));
+        restaurants.put("The Admiral's Cup", new LatLng(39.2817796618453, -76.59335085949435));
+        bars.put("Kong Pocha", new LatLng(39.31252219154175, -76.61723203065816));
+        restaurants.put("Jong Kak", new LatLng(39.312455784156505, -76.61748952270764));
+        restaurants.put("The Cheesecake Factory", new LatLng(39.28647488810012, -76.61014975764644));
+        restaurants.put("The Bygone", new LatLng(39.28288859512139, -76.60211693250669));
+        HashMap<String, LatLng> filtered = new HashMap<>(30);
+        for (String filter: filters) {
+            if (filter.equals("study")) {
+                filtered.putAll(studyLocs);
+            } else if (filter.equals("restaurant")) {
+                filtered.putAll(restaurants);
+            } else if (filter.equals("bar")) {
+                filtered.putAll(bars);
+            } else if (filter.equals("dining hall")) {
+                filtered.putAll(diningHalls);
+            } else if (filter.equals("recreation")) {
+                filtered.putAll(recreation);
+            }
+        }
+        map.clear();
+        for (String location: filtered.keySet()) {
             MarkerOptions marker = new MarkerOptions()
                     .title(location)
-                    .position(locations.get(location));
+                    .position(filtered.get(location));
             this.map.addMarker(marker);
             this.map.setOnMarkerClickListener(marker1 -> {
                 onMarkerClick(marker1);
@@ -342,6 +373,48 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         intent.putExtra("username", getActivity().getIntent().getStringExtra("username"));
         intent.putExtra("location", marker.getPosition());
         startActivity(intent);
+        return true;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.signout) {
+            return false;
+        }
+        if (!item.isChecked()) {
+            if (id == R.id.restaurants) {
+                filters.add("restaurant");
+            } else if (id == R.id.bars) {
+                filters.add("bar");
+            } else if (id == R.id.dininghalls) {
+                filters.add("dining hall");
+            } else if (id == R.id.recreation) {
+                filters.add("recreation");
+            } else if (id == R.id.study) {
+                filters.add("study");
+            }
+            item.setChecked(true);
+        } else {
+            if (id == R.id.restaurants) {
+                filters.remove("restaurant");
+            } else if (id == R.id.bars) {
+                filters.remove("bar");
+            } else if (id == R.id.dininghalls) {
+                filters.remove("dining hall");
+            } else if (id == R.id.recreation) {
+                filters.remove("recreation");
+            } else if (id == R.id.study) {
+                filters.remove("study");
+            }
+            item.setChecked(false);
+        }
+        populateLocations();
         return true;
     }
 }

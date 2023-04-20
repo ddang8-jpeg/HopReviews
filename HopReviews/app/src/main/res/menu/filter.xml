@@ -8,11 +8,26 @@
             />
     <item android:title="@string/filters">
         <menu>
-            <item android:id="@+id/dininghalls" android:title="@string/dining_halls"/>
-            <item android:id="@+id/recreation" android:title="@string/recreation" />
-            <item android:id="@+id/restaurants" android:title="@string/restaurants" />
-            <item android:id="@+id/study" android:title="@string/study" />
-            <item android:id="@+id/bars" android:title="@string/bars" />
+            <item android:id="@+id/dininghalls"
+                android:title="@string/dining_halls"
+                android:checkable="true"
+                android:checked="true"/>
+            <item android:id="@+id/recreation"
+                android:title="@string/recreation"
+                android:checkable="true"
+                android:checked="true"/>
+            <item android:id="@+id/restaurants"
+                android:title="@string/restaurants"
+                android:checkable="true"
+                android:checked="true"/>
+            <item android:id="@+id/study"
+                android:title="@string/study"
+                android:checkable="true"
+                android:checked="true"/>
+            <item android:id="@+id/bars"
+                android:title="@string/bars"
+                android:checkable="true"
+                android:checked="true"/>
         </menu>
     </item>
     <item android:id="@+id/signout" android:title="@string/sign_out"/>
