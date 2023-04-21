@@ -9,5 +9,11 @@
         android:title="@string/add_to_favorite"
         android:visible="true"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/gallery"
+        android:icon="@drawable/baseline_image_24"
+        android:title="See Images"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
 
 </menu>

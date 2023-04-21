@@ -27,6 +27,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.ktx.Firebase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -274,6 +276,12 @@ public class LocationActivity extends AppCompatActivity {
             Toast.makeText(this, "Successfully removed from favorites", Toast.LENGTH_SHORT).show();
             item.setIcon(R.drawable.baseline_star_outline_24);
             favorite = false;
+            return true;
+        } else if (item.getItemId() == R.id.gallery) {
+            Intent intent = new Intent(this, GalleryActivity.class);
+            intent.putExtra("username", getIntent().getStringExtra("username"));
+            intent.putExtra("name", getIntent().getStringExtra("name"));
+            startActivity(intent);
             return true;
         }
         this.finish();
