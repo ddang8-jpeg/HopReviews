@@ -315,7 +315,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         studyLocs.put("Brody Reading Room", new LatLng(39.32835813777735, -76.61932382677452));
         studyLocs.put("Brody Atrium", new LatLng(39.328462865692046, -76.61945594021617));
         studyLocs.put("Gilman Atrium", new LatLng(39.32897433156248, -76.62180893076324));
-
+        studyLocs.put("Kung Fu Tea", new LatLng(39.32633379644478,-76.6157130387117));
+        
+        restaurants.put("Shake Shack (Inner Harbor)", new LatLng(39.2868915,-76.6098097));
+        restaurants.put("Tambers", new LatLng(39.32913745781104,-76.615595561507));
+        restaurants.put("Doner Bros", new LatLng(39.32726997295029,-76.61637284635842));
         restaurants.put("R House", new LatLng(39.32174358987388, -76.62230796246828));
         restaurants.put("Papermoon Diner", new LatLng(39.32248195852942, -76.62127504462953));
         bars.put("Power Plant Live", new LatLng(39.28913653484303, -76.60738906961856));
