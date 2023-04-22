@@ -338,11 +338,45 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         restaurants.put("Monarque", new LatLng(39.284961171885875, -76.59996477298806));
         restaurants.put("Wayward Smokehouse", new LatLng(39.27944258171549, -76.61439678412442));
         restaurants.put("Noble's Bar and Grill", new LatLng(39.27736983554085, -76.61453031346963));
-        restaurants.put("The Admiral's Cup", new LatLng(39.2817796618453, -76.59335085949435));
-        bars.put("Kong Pocha", new LatLng(39.31252219154175, -76.61723203065816));
+        bars.put("The Admiral's Cup", new LatLng(39.2817796618453, -76.59335085949435));
+        restaurants.put("Kong Pocha", new LatLng(39.31252219154175, -76.61723203065816));
         restaurants.put("Jong Kak", new LatLng(39.312455784156505, -76.61748952270764));
         restaurants.put("The Cheesecake Factory", new LatLng(39.28647488810012, -76.61014975764644));
         restaurants.put("The Bygone", new LatLng(39.28288859512139, -76.60211693250669));
+        bars.put("Mosaic", new LatLng(39.29290939441659, -76.60749635455646));
+        bars.put("Banditos", new LatLng(39.27820484214622, -76.61466604192451));
+        bars.put("Charles Village Pub", new LatLng(39.32629358798975, -76.61573790001572));
+        bars.put("Hair of the Dog", new LatLng(39.27253748481091, -76.61534385160795));
+        recreation.put("Rock climbing @ the rec", new LatLng(39.332841641285654, -76.62121832373363));
+        recreation.put("Baltimore Aquarium", new LatLng(39.286153402451696, -76.6083307833923));
+        recreation.put("Penn Station", new LatLng(39.30794694791892, -76.6155430316888));
+        recreation.put("Cinemark @ Towson", new LatLng(39.400954955016196, -76.60038251560405));
+        recreation.put("BMA", new LatLng(39.326867199687385, -76.61936574735219));
+        recreation.put("The Beach", new LatLng(39.32912664338507, -76.61833169266386));
+        restaurants.put("Chick-Fil-A Inner Harbor", new LatLng(39.2872915193586, -76.60992423922532));
+        restaurants.put("Subway @ St. Paul", new LatLng(39.328807949769974, -76.61548005507491));
+        restaurants.put("&pizza - Charles Village", new LatLng(39.32774911826778, -76.61577479316728));
+        restaurants.put("Chipotle - Charles Village", new LatLng(39.32772308503943, -76.61568987782397));
+        restaurants.put("Ajumma", new LatLng(39.32735599436808, -76.61596582385484));
+        restaurants.put("honeygrow - Charles Village", new LatLng(39.32797009653893, -76.61637016248014));
+        restaurants.put("THB", new LatLng(39.32749910604204, -76.61623385580003));
+        restaurants.put("Iron Age", new LatLng(39.28703492126321, -76.7610550916077));
+        restaurants.put("Orient Express", new LatLng(39.32642903174763, -76.61564364713742));
+        restaurants.put("Thai Restaurant", new LatLng(39.32900417520216, -76.60957752812467));
+        studyLocs.put("MSE", new LatLng(39.329085070050795, -76.61942890106404));
+        studyLocs.put("Brody", new LatLng(39.328425275003354, -76.61946587974171));
+        studyLocs.put("Hodson Hall Study", new LatLng(39.32767739958641, -76.62232180105075));
+        studyLocs.put("Peabody Library", new LatLng(39.29776701911953, -76.61499724715699));
+        studyLocs.put("Bird in Hand", new LatLng(39.328076989263366, -76.61675609167177));
+        studyLocs.put("Starbucks", new LatLng(39.32736458498869, -76.61577457157452));
+
+
+
+
+
+
+
+
         HashMap<String, LatLng> filtered = new HashMap<>(30);
         for (String filter: filters) {
             if (filter.equals("study")) {
