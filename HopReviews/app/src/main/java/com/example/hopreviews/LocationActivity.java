@@ -63,7 +63,8 @@ public class LocationActivity extends AppCompatActivity {
     private void isFavorite(Menu menu) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference favRef = database.getReference("users");
-        favRef.child(encodeEmail(getIntent().getStringExtra("username"))).addChildEventListener(new ChildEventListener() {
+        String username = getSharedPreferences("email", MODE_PRIVATE).getString("email", "");
+        favRef.child(encodeEmail(username)).addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                         try {
@@ -132,7 +133,8 @@ public class LocationActivity extends AppCompatActivity {
                 Log.w("loadPost:onCancelled", databaseError.toException());
             }
         };
-        String encodedUser = encodeEmail(getIntent().getStringExtra("username"));
+        String username = getSharedPreferences("email", MODE_PRIVATE).getString("email", "");
+        String encodedUser = encodeEmail(username);
         likesBtn.setOnClickListener(view -> {
             if (dislikes.contains(encodedUser)) {
                 likesRef.child("dislikes").child(encodedUser).setValue(0);
@@ -216,7 +218,8 @@ public class LocationActivity extends AppCompatActivity {
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), AddReviewActivity.class);
             intent.putExtra("name", getIntent().getStringExtra("name"));
-            intent.putExtra("username", getIntent().getStringExtra("username"));
+            String username = getSharedPreferences("email", MODE_PRIVATE).getString("email", "");
+            intent.putExtra("username", username);
             startActivityForResult(intent, 0);
         });
         listView.setAdapter(adapter);
@@ -254,10 +257,11 @@ public class LocationActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        String username = getSharedPreferences("email", MODE_PRIVATE).getString("email", "");
         if (item.getItemId() == R.id.add_to_favorite && !favorite) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference ref = database.getReference("users");
-            ref.child(encodeEmail(getIntent().getStringExtra("username"))).child("favorites")
+            ref.child(encodeEmail(username)).child("favorites")
                     .child(getIntent().getStringExtra("name")).setValue(true);
             Toast.makeText(this, "Successfully added to favorites", Toast.LENGTH_SHORT).show();
             item.setIcon(R.drawable.baseline_star_24);
@@ -266,7 +270,7 @@ public class LocationActivity extends AppCompatActivity {
         } else if (item.getItemId() == R.id.add_to_favorite && favorite) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference ref = database.getReference("users");
-            ref.child(encodeEmail(getIntent().getStringExtra("username"))).child("favorites")
+            ref.child(encodeEmail(username)).child("favorites")
                     .child(getIntent().getStringExtra("name")).setValue(false);
             Toast.makeText(this, "Successfully removed from favorites", Toast.LENGTH_SHORT).show();
             item.setIcon(R.drawable.baseline_star_outline_24);
@@ -274,7 +278,7 @@ public class LocationActivity extends AppCompatActivity {
             return true;
         } else if (item.getItemId() == R.id.gallery) {
             Intent intent = new Intent(this, GalleryActivity.class);
-            intent.putExtra("username", getIntent().getStringExtra("username"));
+            intent.putExtra("username", username);
             intent.putExtra("name", getIntent().getStringExtra("name"));
             startActivity(intent);
             return true;
@@ -286,10 +290,11 @@ public class LocationActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
        super.onActivityResult(requestCode, resultCode, data);
-       if (resultCode == 1) {
+        String username = getSharedPreferences("email", MODE_PRIVATE).getString("email", "");
+        if (resultCode == 1) {
            return;
        } else if (resultCode == 0) {
-           String newUser = data.getStringExtra("username");
+           String newUser = username;
            String newTime = data.getStringExtra("timestamp");
            String newReview = data.getStringExtra("newlyadded");
            String newRating = data.getStringExtra("rating");

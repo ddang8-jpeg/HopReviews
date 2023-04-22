@@ -46,6 +46,7 @@ public class AddReviewActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference refLocations = database.getReference("locations").child(getIntent().getStringExtra("name")).child("reviews");
         DatabaseReference refFeed = database.getReference("feed").child(timestamp);
+        DatabaseReference refUsers = database.getReference("users");
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference();
         button.setOnClickListener(v -> {
@@ -55,10 +56,13 @@ public class AddReviewActivity extends AppCompatActivity {
                 toast.show();
                 return;
             }
-            String username = getIntent().getStringExtra("username");
+            String username = getSharedPreferences("email", MODE_PRIVATE).getString("email", "");
             String rating = String.valueOf(rb.getRating());
             refLocations.child(encodeEmail(username)).child(timestamp).child("review").setValue(review);
             refLocations.child(encodeEmail(username)).child(timestamp).child("rating").setValue(rating);
+            refUsers.child(encodeEmail(username)).child("reviews").child(timestamp).child("review").setValue(review);
+            refUsers.child(encodeEmail(username)).child("reviews").child(timestamp).child("rating").setValue(rating);
+            refUsers.child(encodeEmail(username)).child("reviews").child(timestamp).child("location").setValue(getIntent().getStringExtra("name"));
             refFeed.child(getIntent().getStringExtra("name")).child(encodeEmail(username)).child("review").setValue(review);
             refFeed.child(getIntent().getStringExtra("name")).child(encodeEmail(username)).child("rating").setValue(rating);
             Intent intent = new Intent();
@@ -73,14 +77,11 @@ public class AddReviewActivity extends AppCompatActivity {
             this.finish();
         });
         Button imgButton = binding.selectPhoto;
-        imgButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Photo"), SELECT_PHOTO);
-            }
+        imgButton.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Photo"), SELECT_PHOTO);
         });
     }
 

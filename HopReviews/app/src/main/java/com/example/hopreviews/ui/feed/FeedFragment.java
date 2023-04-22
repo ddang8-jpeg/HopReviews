@@ -53,7 +53,6 @@ public class FeedFragment extends Fragment {
             String location = item.getLocation();
             Intent intent = new Intent(getActivity(), LocationActivity.class);
             intent.putExtra("name", location);
-            intent.putExtra("username", getActivity().getIntent().getStringExtra("username"));
             startActivity(intent);
         });
         ref.addChildEventListener(new ChildEventListener() {

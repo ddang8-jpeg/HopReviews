@@ -88,7 +88,6 @@ public class FavoritesFragment extends Fragment {
                 String location = item.split("\n")[1];
                 Intent intent = new Intent(getActivity(), LocationActivity.class);
                 intent.putExtra("name", location);
-                intent.putExtra("username", getActivity().getIntent().getStringExtra("username"));
                 startActivity(intent);
             }
         });
