@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/review_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:id="@+id/review_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="15dp"
+            android:text="TextView"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:layout_conversion_absoluteHeight="22dp"
+            tools:layout_conversion_absoluteWidth="464dp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="TextView"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            tools:layout_conversion_absoluteHeight="19dp"
+            tools:layout_conversion_absoluteWidth="395dp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="22dp" />
+
+        <TextView
+            android:id="@+id/review_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:paddingLeft="10dp"
+            android:text="TextView"
+            android:textSize="16sp"
+            tools:layout_conversion_absoluteHeight="22dp"
+            tools:layout_conversion_absoluteWidth="395dp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="98dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RatingBar
+                android:id="@+id/user_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:progressTint="@color/gold"
+                tools:layout_conversion_absoluteHeight="57dp"
+                tools:layout_conversion_absoluteWidth="240dp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="41dp" />
+
+            <TextView
+                android:id="@+id/review_date"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:padding="10dp"
+                android:text="TextView"
+                android:textAlignment="textEnd"
+                android:textSize="12sp"
+                tools:layout_conversion_absoluteHeight="14dp"
+                tools:layout_conversion_absoluteWidth="395dp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="120dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
