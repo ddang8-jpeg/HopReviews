@@ -36,7 +36,6 @@ import java.util.List;
 public class EditProfileActivity extends AppCompatActivity {
     private ActivityEditProfileBinding binding;
     private SharedPreferences sharedPreferences;
-    private ArrayList<String> spinner_entries;
     private String originalEmail;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,12 +63,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 firstNameEditText.setText(fName);
                 lastNameEditText.setText(lName);
                 emailEditText.setText(registered_email);
-                // TODO: initialize spinner to be current year
-//                spinner_entries = new
-//                        ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.spinner_entries)));
-//                spinner_entries.remove(yr);
-//                spinner_entries.add(0, yr);
-                yearSpinner.setPrompt(yr);
+                yearSpinner.setSelection(yr.equals("Freshman") ? 0 : yr.equals("Sophomore") ? 1 :
+                        yr.equals("Junior") ? 2 : yr.equals("Senior") ? 3 : 4);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -92,14 +87,14 @@ public class EditProfileActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(getApplicationContext(), R.string.invalid_username, Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
-                    ref.child(em).child("email").get().addOnCompleteListener(task -> {
+                    ref.child("email").get().addOnCompleteListener(task -> {
                         if (entered_email.equals(originalEmail)) {
-                            ref.child(em).child("firstName").setValue(fn);
-                            ref.child(em).child("lastName").setValue(ln);
-                            ref.child(em).child("year").setValue(yr);
+                            ref.child("firstName").setValue(fn);
+                            ref.child("lastName").setValue(ln);
+                            ref.child("year").setValue(yr);
                             Toast toast = Toast.makeText(getApplicationContext(), "Save successful!", Toast.LENGTH_SHORT);
                             toast.show();
-                            openProfileActivity();
+                            this.finish();
                         } else {
                             Toast toast = Toast.makeText(getApplicationContext(), "You cannot change emails.", Toast.LENGTH_SHORT);
                             toast.show();
@@ -145,10 +140,5 @@ public class EditProfileActivity extends AppCompatActivity {
         } else {
             return !username.trim().isEmpty();
         }
-    }
-
-    public void openProfileActivity() {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        startActivity(intent);
     }
 }
