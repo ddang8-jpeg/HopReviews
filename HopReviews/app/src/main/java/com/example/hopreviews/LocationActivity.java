@@ -3,21 +3,18 @@ package com.example.hopreviews;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.hopreviews.adapter.LocationReviewAdapter;
+import com.example.hopreviews.data.model.LocationReview;
 import com.example.hopreviews.databinding.ActivityLocationBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
@@ -26,9 +23,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.ktx.Firebase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,11 +35,11 @@ import java.util.TreeMap;
 public class LocationActivity extends AppCompatActivity {
 
     ActivityLocationBinding binding;
-    private ListView listView;
-    ArrayList<String> reviews;
+    private RecyclerView listView;
+    ArrayList<LocationReview> reviews;
     DatabaseReference ref;
     DatabaseReference likesRef;
-    ArrayAdapter<String> adapter;
+    LocationReviewAdapter adapter;
     Set<String> likes = new HashSet<>();
     Set<String> dislikes = new HashSet<>();
     private boolean favorite;
@@ -171,7 +165,7 @@ public class LocationActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         ref = database.getReference("locations");
         listView = binding.reviewlist;
-        adapter = new ArrayAdapter<>(LocationActivity.this, android.R.layout.simple_list_item_1, reviews);
+        adapter = new LocationReviewAdapter(getApplicationContext(), reviews, (position, v) -> {});
         ref.child(getIntent().getStringExtra("name")).child("reviews").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -188,7 +182,7 @@ public class LocationActivity extends AppCompatActivity {
                 if (map != null) {
                     for (String timestamp: sortedKeys) {
                         if (map.get(timestamp).get("rating") != null) {
-                            String item = createListItem(snapshot.getKey(), timestamp,
+                            LocationReview item = createListItem(snapshot.getKey(), timestamp,
                                     map.get(timestamp).get("review"), map.get(timestamp).get("rating"));
                             reviews.add(item);
                         }
@@ -228,10 +222,11 @@ public class LocationActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
-    private String createListItem(String username, String timestamp, String review, String rating) {
+    private LocationReview createListItem(String username, String timestamp, String review, String rating) {
         Date date = new Date(Long.parseLong(timestamp));
-        return "\nUsername: " + decodeEmail(username) + "\nRating: " + rating + "/5.0\n\nReview: " + review +
-                "\n\nDate Posted: " + date.toLocaleString() + "\n";
+        LocationReview item = new LocationReview(review, date.toLocaleString(),
+                decodeEmail(username), Float.parseFloat(rating));
+        return item;
     }
 
     private String encodeEmail(String str) {
@@ -299,9 +294,11 @@ public class LocationActivity extends AppCompatActivity {
            String newReview = data.getStringExtra("newlyadded");
            String newRating = data.getStringExtra("rating");
 
-           String item = createListItem(newUser, newTime, newReview, newRating);
-           if (reviews.contains(item)) {
-               return;
+           LocationReview item = createListItem(newUser, newTime, newReview, newRating);
+           for (LocationReview review: reviews) {
+               if (review.getDate().equals(item.getDate())) {
+                   return;
+               }
            }
            reviews.add(0, item);
            adapter.notifyDataSetChanged();

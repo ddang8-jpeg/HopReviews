@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
-public class FeedFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class FeedFragment extends Fragment {
 
     private FragmentFeedBinding binding;
     private RecyclerView listView;
@@ -48,7 +48,14 @@ public class FeedFragment extends Fragment implements AdapterView.OnItemClickLis
         ref = database.getReference("feed");
         listView = binding.feedList;
         reviews = new ArrayList<>();
-        adapter = new ReviewAdapter(getContext(), reviews, this);
+        adapter = new ReviewAdapter(getContext(), reviews, (position, v) -> {
+            Review item = adapter.getItem(position);
+            String location = item.getLocation();
+            Intent intent = new Intent(getActivity(), LocationActivity.class);
+            intent.putExtra("name", location);
+            intent.putExtra("username", getActivity().getIntent().getStringExtra("username"));
+            startActivity(intent);
+        });
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -109,16 +116,5 @@ public class FeedFragment extends Fragment implements AdapterView.OnItemClickLis
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //you can get the clicked item from the adapter using its position
-        Review item = adapter.getItem(position);
-        String location = item.getLocation().split("\n")[1];
-        Intent intent = new Intent(getActivity(), LocationActivity.class);
-        intent.putExtra("name", location);
-        intent.putExtra("username", getActivity().getIntent().getStringExtra("username"));
-        startActivity(intent);
     }
 }

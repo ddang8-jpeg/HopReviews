@@ -15,34 +15,21 @@
         android:id="@+id/linearLayout">
 
         <TextView
-            android:id="@+id/review_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingTop="15dp"
-            android:text="TextView"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:layout_conversion_absoluteHeight="22dp"
-            tools:layout_conversion_absoluteWidth="464dp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp" />
-
-        <TextView
-            android:id="@+id/user_name"
+            android:id="@+id/user_name_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:text="TextView"
             android:textAllCaps="false"
             android:textSize="16sp"
+            android:textStyle="bold"
             tools:layout_conversion_absoluteHeight="19dp"
             tools:layout_conversion_absoluteWidth="395dp"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="22dp" />
 
         <TextView
-            android:id="@+id/review_text"
+            android:id="@+id/review_text_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -60,7 +47,7 @@
             android:orientation="horizontal">
 
             <RatingBar
-                android:id="@+id/user_rating"
+                android:id="@+id/user_rating_location"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:clickable="false"
@@ -73,7 +60,7 @@
                 tools:layout_editor_absoluteY="41dp" />
 
             <TextView
-                android:id="@+id/review_date"
+                android:id="@+id/review_date_location"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="bottom"

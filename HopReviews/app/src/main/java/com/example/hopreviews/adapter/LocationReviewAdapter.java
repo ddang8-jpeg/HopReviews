@@ -11,39 +11,37 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hopreviews.R;
-import com.example.hopreviews.data.model.Review;
+import com.example.hopreviews.data.model.LocationReview;
 
 import java.util.List;
 
 // a lot of this code is derived from its Kotlin version on an open source
 // android tutorial https://developer.android.com/codelabs/basic-android-kotlin-training-display-list-cards#3
 
-public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
+public class LocationReviewAdapter extends RecyclerView.Adapter<LocationReviewAdapter.LocationReviewViewHolder> {
 
     private final Context context;
-    private final List<Review> dataset;
+    private final List<LocationReview> dataset;
     private final ClickListener clickListener;
 
 
-    public ReviewAdapter(Context context, List<Review> dataset, ClickListener clickListener) {
+    public LocationReviewAdapter(Context context, List<LocationReview> dataset, ClickListener clickListener) {
         this.context = context;
         this.dataset = dataset;
         this.clickListener = clickListener;
     }
-    public class ReviewViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView location;
+    public class LocationReviewViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView userName;
         public RatingBar userRating;
-        public TextView userReview;
-        public TextView reviewDate;
+        public TextView userLocationReview;
+        public TextView LocationReviewDate;
 
-        public ReviewViewHolder(View view) {
+        public LocationReviewViewHolder(View view) {
             super(view);
-            location = view.findViewById(R.id.review_location);
-            userName = view.findViewById(R.id.user_name);
-            userRating = view.findViewById(R.id.user_rating);
-            userReview = view.findViewById(R.id.review_text);
-            reviewDate = view.findViewById(R.id.review_date);
+            userName = view.findViewById(R.id.user_name_location);
+            userRating = view.findViewById(R.id.user_rating_location);
+            userLocationReview = view.findViewById(R.id.review_text_location);
+            LocationReviewDate = view.findViewById(R.id.review_date_location);
             view.setOnClickListener(this);
         }
 
@@ -59,18 +57,17 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     }
 
     @Override
-    public ReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public LocationReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View adapterLayout = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.review_item, parent, false);
-        return new ReviewViewHolder(adapterLayout);
+                .inflate(R.layout.location_item, parent, false);
+        return new LocationReviewViewHolder(adapterLayout);
     }
     @Override
-    public void onBindViewHolder(ReviewViewHolder holder, int position) {
-        Review item = dataset.get(position);
-        holder.reviewDate.setText(item.getDate());
-        holder.location.setText(item.getLocation());
-        holder.userReview.setText(item.getReview());
+    public void onBindViewHolder(LocationReviewViewHolder holder, int position) {
+        LocationReview item = dataset.get(position);
+        holder.LocationReviewDate.setText(item.getDate());
+        holder.userLocationReview.setText(item.getReview());
         holder.userName.setText(item.getUser());
         holder.userRating.setRating(item.getRating());
         holder.userRating.setNumStars(5);
@@ -80,7 +77,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         return dataset.size();
     }
 
-    public Review getItem(int position) {
+    public LocationReview getItem(int position) {
         return dataset.get(position);
     }
 
