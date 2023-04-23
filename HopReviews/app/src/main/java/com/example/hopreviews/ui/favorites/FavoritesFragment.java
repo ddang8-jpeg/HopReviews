@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -39,6 +40,8 @@ public class FavoritesFragment extends Fragment {
             ViewGroup container, Bundle savedInstanceState) {
         FavoritesViewModel favoritesViewModel =
                 new ViewModelProvider(this).get(FavoritesViewModel.class);
+
+        setHasOptionsMenu(true);
 
         binding = FragmentFavoritesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -108,5 +111,10 @@ public class FavoritesFragment extends Fragment {
 
     private String createListItem(String location) {
         return "\n" + location + "\n";
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.getItem(1).setVisible(false);
     }
 }

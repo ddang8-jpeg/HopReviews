@@ -370,13 +370,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         studyLocs.put("Bird in Hand", new LatLng(39.328076989263366, -76.61675609167177));
         studyLocs.put("Starbucks", new LatLng(39.32736458498869, -76.61577457157452));
 
-
-
-
-
-
-
-
         HashMap<String, LatLng> filtered = new HashMap<>(30);
         for (String filter: filters) {
             if (filter.equals("study")) {

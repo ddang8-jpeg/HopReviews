@@ -3,6 +3,7 @@ package com.example.hopreviews.ui.feed;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -43,6 +44,8 @@ public class FeedFragment extends Fragment {
 
         binding = FragmentFeedBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        setHasOptionsMenu(true);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         ref = database.getReference("feed");
@@ -115,5 +118,10 @@ public class FeedFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.getItem(1).setVisible(false);
     }
 }
