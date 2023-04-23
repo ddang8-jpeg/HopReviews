@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -15,6 +14,9 @@ import com.example.hopreviews.R;
 import com.example.hopreviews.data.model.LocationReview;
 
 import java.util.List;
+
+// a lot of this code is derived from its Kotlin version on an open source
+// android tutorial https://developer.android.com/codelabs/basic-android-kotlin-training-display-list-cards#3
 
 public class LocationReviewAdapter extends RecyclerView.Adapter<LocationReviewAdapter.LocationReviewViewHolder> {
 
@@ -33,8 +35,6 @@ public class LocationReviewAdapter extends RecyclerView.Adapter<LocationReviewAd
         public RatingBar userRating;
         public TextView userLocationReview;
         public TextView LocationReviewDate;
-        public Button upvote;
-        public Button downvote;
 
         public LocationReviewViewHolder(View view) {
             super(view);
@@ -42,8 +42,6 @@ public class LocationReviewAdapter extends RecyclerView.Adapter<LocationReviewAd
             userRating = view.findViewById(R.id.user_rating_location);
             userLocationReview = view.findViewById(R.id.review_text_location);
             LocationReviewDate = view.findViewById(R.id.review_date_location);
-            upvote = view.findViewById(R.id.upvote_button);
-            downvote = view.findViewById(R.id.downvote_button);
             view.setOnClickListener(this);
         }
 
@@ -73,12 +71,6 @@ public class LocationReviewAdapter extends RecyclerView.Adapter<LocationReviewAd
         holder.userName.setText(item.getUser());
         holder.userRating.setRating(item.getRating());
         holder.userRating.setNumStars(5);
-        holder.upvote.setOnClickListener(v -> {
-
-        });
-        holder.downvote.setOnClickListener(v -> {
-
-        });
     }
     @Override
     public int getItemCount() {
