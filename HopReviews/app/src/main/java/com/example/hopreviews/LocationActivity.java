@@ -172,21 +172,12 @@ public class LocationActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Map<String, Map<String, String>> map = (Map<String, Map<String, String>>) snapshot.getValue();
-                TreeMap<String, Map<String, String>> sorted = null;
                 if (map != null) {
-                    sorted = new TreeMap<>(map);
-                }
-                ArrayList<String> sortedKeys = null;
-                if (sorted != null) {
-                    sortedKeys = new ArrayList<>(sorted.keySet());
-                }
-                Collections.reverse(sortedKeys);
-                if (map != null) {
-                    for (String timestamp: sortedKeys) {
-                        if (map.get(timestamp).get("rating") != null) {
-                            LocationReview item = createListItem(snapshot.getKey(), timestamp,
-                                    map.get(timestamp).get("review"), map.get(timestamp).get("rating"));
-                            reviews.add(item);
+                    for (String user: map.keySet()) {
+                        if (map.get(user).get("rating") != null) {
+                            LocationReview item = createListItem(user, snapshot.getKey(),
+                                    map.get(user).get("review"), map.get(user).get("rating"));
+                            reviews.add(0, item);
                         }
                     }
                 }

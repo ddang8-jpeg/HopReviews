@@ -44,7 +44,8 @@ public class AddReviewActivity extends AppCompatActivity {
         EditText reviewText = findViewById(R.id.reviewText);
         String timestamp = String.valueOf(System.currentTimeMillis());
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference refLocations = database.getReference("locations").child(getIntent().getStringExtra("name")).child("reviews");
+        DatabaseReference refLocations = database.getReference("locations")
+                .child(getIntent().getStringExtra("name")).child("reviews");
         DatabaseReference refFeed = database.getReference("feed").child(timestamp);
         DatabaseReference refUsers = database.getReference("users");
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -58,8 +59,8 @@ public class AddReviewActivity extends AppCompatActivity {
             }
             String username = getSharedPreferences("email", MODE_PRIVATE).getString("email", "");
             String rating = String.valueOf(rb.getRating());
-            refLocations.child(encodeEmail(username)).child(timestamp).child("review").setValue(review);
-            refLocations.child(encodeEmail(username)).child(timestamp).child("rating").setValue(rating);
+            refLocations.child(timestamp).child(encodeEmail(username)).child("review").setValue(review);
+            refLocations.child(timestamp).child(encodeEmail(username)).child("rating").setValue(rating);
             refUsers.child(encodeEmail(username)).child("reviews").child(timestamp).child("review").setValue(review);
             refUsers.child(encodeEmail(username)).child("reviews").child(timestamp).child("rating").setValue(rating);
             refUsers.child(encodeEmail(username)).child("reviews").child(timestamp).child("location").setValue(getIntent().getStringExtra("name"));

@@ -80,7 +80,17 @@ public class ProfileActivity extends AppCompatActivity {
                 for (String key: map.keySet()) {
                     Review item = createListItem(email, key, map.get(key).get("review"),
                             map.get(key).get("rating"), map.get(key).get("location"));
-                    reviews.add(item);
+                    boolean getOut = false;
+                    for (Review review: reviews) {
+                        if (review.getDate().equals(item.getDate())) {
+                            getOut = true;
+                            continue;
+                        }
+                    }
+                    if (getOut) {
+                        continue;
+                    }
+                    reviews.add(0, item);
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -115,7 +125,7 @@ public class ProfileActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.edit_profile) {
             Intent intent = new Intent(this, EditProfileActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, 100);
             return true;
         } else {
             this.finish();
@@ -136,5 +146,11 @@ public class ProfileActivity extends AppCompatActivity {
         str = str.replaceAll("-", "@");
         str = str.replaceAll("_", ".");
         return str;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }
