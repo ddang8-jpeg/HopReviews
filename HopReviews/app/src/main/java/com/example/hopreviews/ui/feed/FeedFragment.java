@@ -1,5 +1,6 @@
 package com.example.hopreviews.ui.feed;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,8 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hopreviews.LocationActivity;
+import com.example.hopreviews.R;
 import com.example.hopreviews.adapter.ReviewAdapter;
+import com.example.hopreviews.adapter.VotableReviewAdapter;
 import com.example.hopreviews.data.model.Review;
+import com.example.hopreviews.data.model.VotableReview;
 import com.example.hopreviews.databinding.FragmentFeedBinding;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -33,9 +38,9 @@ public class FeedFragment extends Fragment {
 
     private FragmentFeedBinding binding;
     private RecyclerView listView;
-    ArrayList<Review> reviews;
+    ArrayList<VotableReview> reviews;
     DatabaseReference ref;
-    ReviewAdapter adapter;
+    VotableReviewAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
@@ -51,13 +56,69 @@ public class FeedFragment extends Fragment {
         ref = database.getReference("feed");
         listView = binding.feedList;
         reviews = new ArrayList<>();
-        adapter = new ReviewAdapter(getContext(), reviews, (position, v) -> {
-            Review item = adapter.getItem(position);
-            String location = item.getLocation();
-            Intent intent = new Intent(getActivity(), LocationActivity.class);
-            intent.putExtra("name", location);
-            startActivity(intent);
+        adapter = new VotableReviewAdapter(getContext(), reviews, new VotableReviewAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                VotableReview item = adapter.getItem(position);
+                String location = item.getLocation();
+                Intent intent = new Intent(getActivity(), LocationActivity.class);
+                intent.putExtra("name", location);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onUpVote(int position, View v) {
+                VotableReview item = adapter.getItem(position);
+                String location = item.getLocation();
+                String timestamp = item.getTimestamp();
+                String user = item.getUser();
+                ArrayList<String> upvotes = item.getUpvotes();
+                ArrayList<String> downvotes = item.getDownvotes();
+                String voter = encodeEmail(getActivity()
+                                .getSharedPreferences("email",
+                                        Context.MODE_PRIVATE).getString("email", ""));
+                ref.child(timestamp).child(location).child(encodeEmail(user)).child("likes").child(voter).setValue(true);
+                ref.child(timestamp).child(location).child(encodeEmail(user)).child("dislikes").child(voter).setValue(false);
+                Button up = v.findViewById(R.id.upvote_button);
+                Button down = v.getRootView().findViewById(R.id.downvote_button);
+                if (upvotes.contains(voter)) {
+                    upvotes.remove(voter);
+                    downvotes.remove(voter);
+                } else {
+                    upvotes.add(voter);
+                    downvotes.remove(voter);
+                }
+                up.setText(String.valueOf(upvotes.size()));
+                down.setText(String.valueOf(downvotes.size()));
+            }
+
+            @Override
+            public void onDownVote(int position, View v) {
+                VotableReview item = adapter.getItem(position);
+                String location = item.getLocation();
+                String timestamp = item.getTimestamp();
+                String user = item.getUser();
+                ArrayList<String> upvotes = item.getUpvotes();
+                ArrayList<String> downvotes = item.getDownvotes();
+                String voter = encodeEmail(getActivity()
+                        .getSharedPreferences("email",
+                                Context.MODE_PRIVATE).getString("email", ""));
+                ref.child(timestamp).child(location).child(encodeEmail(user)).child("dislikes").child(voter).setValue(true);
+                ref.child(timestamp).child(location).child(encodeEmail(user)).child("likes").child(voter).setValue(false);
+                Button up = v.getRootView().findViewById(R.id.upvote_button);
+                Button down = v.findViewById(R.id.downvote_button);
+                if (downvotes.contains(voter)) {
+                    downvotes.remove(voter);
+                    upvotes.remove(voter);
+                } else {
+                    downvotes.add(voter);
+                    upvotes.remove(voter);
+                }
+                up.setText(String.valueOf(upvotes.size()));
+                down.setText(String.valueOf(downvotes.size()));
+            }
         });
+
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -65,11 +126,32 @@ public class FeedFragment extends Fragment {
                 for (DataSnapshot timestamp: timestamps) {
                     Map<String, Map<String, String>> map = (Map<String, Map<String, String>>) timestamp.getValue();
                     if (map != null) {
-                        for (String location: map.keySet()) {
-                                Review item = createListItem(location, timestamp.getRef().getParent().getKey(), map.get(location).get("review"),
-                                        map.get(location).get("rating"), timestamp.getKey());
-                                reviews.add(item);
+                        for (String user: map.keySet()) {
+                            ArrayList<String> likedBy = new ArrayList<>();
+                            ArrayList<String> dislikedBy = new ArrayList<>();
+                            if (timestamp.child(encodeEmail(user)).child("likes").getValue() != null) {
+                                Map<String, Boolean> likes = (Map<String, Boolean>) timestamp
+                                        .child(encodeEmail(user)).child("likes").getValue();
+                                for (String like : likes.keySet()) {
+                                    if (likes.get(like)) {
+                                        likedBy.add(like);
+                                    }
+                                }
                             }
+                            if (timestamp.child(encodeEmail(user)).child("dislikes").getValue() != null) {
+                                Map<String, Boolean> dislikes = (Map<String, Boolean>) timestamp
+                                        .child(encodeEmail(user)).child("dislikes").getValue();
+                                for (String dislike : dislikes.keySet()) {
+                                    if (dislikes.get(dislike)) {
+                                        dislikedBy.add(dislike);
+                                    }
+                                }
+                            }
+                            VotableReview item = createListItem(user,
+                                    timestamp.getRef().getParent().getKey(), map.get(user).get("review"),
+                                    map.get(user).get("rating"), timestamp.getKey(), likedBy, dislikedBy);
+                            reviews.add(item);
+                        }
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -99,10 +181,18 @@ public class FeedFragment extends Fragment {
         return root;
     }
 
-    private Review createListItem(String username, String timestamp, String review, String rating, String location) {
+    private VotableReview createListItem(String username, String timestamp, String review,
+                                         String rating, String location, ArrayList<String> likes, ArrayList<String> dislikes) {
         Date date = new Date(Long.parseLong(timestamp));
-        Review reviewItem = new Review(review, date.toLocaleString(), location, decodeEmail(username), Float.parseFloat(rating));
+        VotableReview reviewItem = new VotableReview(review, date.toLocaleString(),
+                location, decodeEmail(username), Float.parseFloat(rating), timestamp, likes, dislikes);
         return reviewItem;
+    }
+
+    private String encodeEmail(String str) {
+        str = str.replaceAll("@", "-");
+        str = str.replaceAll("\\.", "_");
+        return str;
     }
 
     private String decodeEmail(String str) {

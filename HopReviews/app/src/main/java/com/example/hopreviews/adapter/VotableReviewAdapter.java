@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hopreviews.R;
 import com.example.hopreviews.data.model.VotableReview;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -32,6 +35,8 @@ public class VotableReviewAdapter extends RecyclerView.Adapter<VotableReviewAdap
         public RatingBar userRating;
         public TextView userVotableReview;
         public TextView VotableReviewDate;
+        public Button upvote;
+        public Button downvote;
 
         public VotableReviewViewHolder(View view) {
             super(view);
@@ -40,6 +45,10 @@ public class VotableReviewAdapter extends RecyclerView.Adapter<VotableReviewAdap
             userRating = view.findViewById(R.id.user_rating_votable);
             userVotableReview = view.findViewById(R.id.review_text_votable);
             VotableReviewDate = view.findViewById(R.id.review_date_votable);
+            upvote = view.findViewById(R.id.upvote_button);
+            downvote = view.findViewById(R.id.downvote_button);
+            upvote.setOnClickListener(this);
+            downvote.setOnClickListener(this);
             view.setOnClickListener(this);
         }
 
@@ -47,9 +56,14 @@ public class VotableReviewAdapter extends RecyclerView.Adapter<VotableReviewAdap
         public void onClick(View view) {
             //passing the clicked position to the parent class
             int position = getAdapterPosition();
-            System.out.println(position);
             if (position >= 0) {
-                clickListener.onItemClick(position, view);
+                if (view.getId() == R.id.upvote_button) {
+                    clickListener.onUpVote(position, view);
+                } else if (view.getId() == R.id.downvote_button) {
+                    clickListener.onDownVote(position, view);
+                } else {
+                    clickListener.onItemClick(position, view);
+                }
             }
         }
     }
@@ -70,6 +84,8 @@ public class VotableReviewAdapter extends RecyclerView.Adapter<VotableReviewAdap
         holder.userName.setText(item.getUser());
         holder.userRating.setRating(item.getRating());
         holder.userRating.setNumStars(5);
+        holder.upvote.setText(String.valueOf(item.getUpvotes().size()));
+        holder.downvote.setText(String.valueOf(item.getDownvotes().size()));
     }
     @Override
     public int getItemCount() {
@@ -82,5 +98,7 @@ public class VotableReviewAdapter extends RecyclerView.Adapter<VotableReviewAdap
 
     public interface ClickListener {
         void onItemClick(int position, View v);
+        void onUpVote(int position, View v);
+        void onDownVote(int position, View v);
     }
 }
