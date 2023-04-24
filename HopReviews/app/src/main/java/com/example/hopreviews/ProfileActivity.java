@@ -77,20 +77,24 @@ public class ProfileActivity extends AppCompatActivity {
                 emailText.setText(email);
                 Map<String, Map<String, String>> map =
                         (Map<String, Map<String, String>>) snapshot.child("reviews").getValue();
-                for (String key: map.keySet()) {
-                    Review item = createListItem(email, key, map.get(key).get("review"),
-                            map.get(key).get("rating"), map.get(key).get("location"));
-                    boolean getOut = false;
-                    for (Review review: reviews) {
-                        if (review.getDate().equals(item.getDate())) {
-                            getOut = true;
+                if (map != null) {
+
+
+                    for (String key : map.keySet()) {
+                        Review item = createListItem(email, key, map.get(key).get("review"),
+                                map.get(key).get("rating"), map.get(key).get("location"));
+                        boolean getOut = false;
+                        for (Review review : reviews) {
+                            if (review.getDate().equals(item.getDate())) {
+                                getOut = true;
+                                continue;
+                            }
+                        }
+                        if (getOut) {
                             continue;
                         }
+                        reviews.add(0, item);
                     }
-                    if (getOut) {
-                        continue;
-                    }
-                    reviews.add(0, item);
                 }
                 adapter.notifyDataSetChanged();
             }
