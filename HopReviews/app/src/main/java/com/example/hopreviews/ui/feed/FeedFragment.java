@@ -123,6 +123,7 @@ public class FeedFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Iterable<DataSnapshot> timestamps = snapshot.getChildren();
+
                 for (DataSnapshot timestamp: timestamps) {
                     Map<String, Map<String, String>> map = (Map<String, Map<String, String>>) timestamp.getValue();
                     if (map != null) {
@@ -150,7 +151,7 @@ public class FeedFragment extends Fragment {
                             VotableReview item = createListItem(user,
                                     timestamp.getRef().getParent().getKey(), map.get(user).get("review"),
                                     map.get(user).get("rating"), timestamp.getKey(), likedBy, dislikedBy);
-                            reviews.add(item);
+                            reviews.add(0, item);
                         }
                     }
                 }
@@ -184,6 +185,9 @@ public class FeedFragment extends Fragment {
     private VotableReview createListItem(String username, String timestamp, String review,
                                          String rating, String location, ArrayList<String> likes, ArrayList<String> dislikes) {
         Date date = new Date(Long.parseLong(timestamp));
+        if (rating == null) {
+            rating = "3.0";
+        }
         VotableReview reviewItem = new VotableReview(review, date.toLocaleString(),
                 location, decodeEmail(username), Float.parseFloat(rating), timestamp, likes, dislikes);
         return reviewItem;

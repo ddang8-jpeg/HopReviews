@@ -70,7 +70,6 @@ public class LocationActivity extends AppCompatActivity {
                         try {
                             Map<String, Boolean> map = (Map<String, Boolean>) snapshot.getValue();
                             if (map.get(getIntent().getStringExtra("name"))) {
-                                System.out.println("here3");
                                 menu.getItem(0).setIcon(R.drawable.baseline_star_24);
                                 favorite = true;
                             }
@@ -218,6 +217,9 @@ public class LocationActivity extends AppCompatActivity {
 
     private LocationReview createListItem(String username, String timestamp, String review, String rating) {
         Date date = new Date(Long.parseLong(timestamp));
+        if (rating == null) {
+            rating = "3.0";
+        }
         LocationReview item = new LocationReview(review, date.toLocaleString(),
                 decodeEmail(username), Float.parseFloat(rating));
         return item;
@@ -281,16 +283,15 @@ public class LocationActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
        super.onActivityResult(requestCode, resultCode, data);
-        String username = getSharedPreferences("email", MODE_PRIVATE).getString("email", "");
         if (resultCode == 1) {
            return;
        } else if (resultCode == 0) {
-           String newUser = username;
-           String newTime = data.getStringExtra("timestamp");
-           String newReview = data.getStringExtra("newlyadded");
-           String newRating = data.getStringExtra("rating");
+            String username = data.getStringExtra("username");
+            String newTime = data.getStringExtra("timestamp");
+            String newReview = data.getStringExtra("newlyadded");
+            String newRating = data.getStringExtra("rating");
 
-           LocationReview item = createListItem(newUser, newTime, newReview, newRating);
+           LocationReview item = createListItem(username, newTime, newReview, newRating);
            for (LocationReview review: reviews) {
                if (review.getDate().equals(item.getDate())) {
                    return;

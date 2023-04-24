@@ -12,57 +12,63 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-    <TextView
-        android:id="@+id/loc_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/ratingbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/loc_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/ratingbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-    <RatingBar
-        android:id="@+id/ratingbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:isIndicator="false"
-        android:numStars="5"
-        android:progressTint="@color/gold"
-        android:stepSize="0.5"
-        app:layout_constraintBottom_toTopOf="@+id/reviewText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.48000002" />
+        <RatingBar
+            android:id="@+id/ratingbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:isIndicator="false"
+            android:numStars="5"
+            android:progressTint="@color/gold"
+            android:stepSize="0.5"
+            app:layout_constraintBottom_toTopOf="@+id/reviewText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.48000002" />
 
-    <EditText
-        android:id="@+id/reviewText"
-        android:layout_width="350dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="76dp"
-        android:background="@drawable/rounded_edittext"
-        android:gravity="top|left"
-        android:hint="@string/write_your_review_here"
-        android:inputType="textMultiLine"
-        android:lines="10"
-        android:maxWidth="350dp"
-        android:maxLines="15"
-        android:minLines="1"
-        android:padding="20dp"
-        android:selectAllOnFocus="true"
-        android:singleLine="false"
-        app:layout_constraintBottom_toTopOf="@+id/post"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.426"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.184" />
+        <EditText
+            android:id="@+id/reviewText"
+            android:layout_width="350dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="76dp"
+            android:background="@drawable/rounded_edittext"
+            android:gravity="top|left"
+            android:hint="@string/write_your_review_here"
+            android:inputType="textMultiLine"
+            android:lines="10"
+            android:maxWidth="350dp"
+            android:maxLines="15"
+            android:minLines="1"
+            android:padding="20dp"
+            android:selectAllOnFocus="true"
+            android:singleLine="false"
+            app:layout_constraintBottom_toTopOf="@+id/post"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.426"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.184" />
 
-    <Button
+        <CheckBox
+            android:id="@+id/anonymous_user"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:text="Make this review anonymous" />
+
+        <Button
         android:id="@+id/select_photo"
         android:layout_width="146dp"
         android:layout_height="49dp"

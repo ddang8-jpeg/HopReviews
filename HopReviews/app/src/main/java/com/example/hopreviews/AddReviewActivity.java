@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -39,9 +40,10 @@ public class AddReviewActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("Add Review for " + getIntent().getStringExtra("name"));
         }
-        Button button = findViewById(R.id.post);
-        RatingBar rb = findViewById(R.id.ratingbar);
-        EditText reviewText = findViewById(R.id.reviewText);
+        Button button = binding.post;
+        RatingBar rb = binding.ratingbar;
+        EditText reviewText = binding.reviewText;
+        CheckBox check = binding.anonymousUser;
         String timestamp = String.valueOf(System.currentTimeMillis());
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference refLocations = database.getReference("locations")
@@ -59,11 +61,15 @@ public class AddReviewActivity extends AppCompatActivity {
             }
             String username = getSharedPreferences("email", MODE_PRIVATE).getString("email", "");
             String rating = String.valueOf(rb.getRating());
-            refLocations.child(timestamp).child(encodeEmail(username)).child("review").setValue(review);
-            refLocations.child(timestamp).child(encodeEmail(username)).child("rating").setValue(rating);
+            boolean anonymous = check.isChecked();
             refUsers.child(encodeEmail(username)).child("reviews").child(timestamp).child("review").setValue(review);
             refUsers.child(encodeEmail(username)).child("reviews").child(timestamp).child("rating").setValue(rating);
             refUsers.child(encodeEmail(username)).child("reviews").child(timestamp).child("location").setValue(getIntent().getStringExtra("name"));
+            if (anonymous) {
+                username = "Anonymous";
+            }
+            refLocations.child(timestamp).child(encodeEmail(username)).child("review").setValue(review);
+            refLocations.child(timestamp).child(encodeEmail(username)).child("rating").setValue(rating);
             refFeed.child(getIntent().getStringExtra("name")).child(encodeEmail(username)).child("review").setValue(review);
             refFeed.child(getIntent().getStringExtra("name")).child(encodeEmail(username)).child("rating").setValue(rating);
             Intent intent = new Intent();

@@ -25,12 +25,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.core.utilities.Tree;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class ProfileActivity extends AppCompatActivity {
     private ActivityProfileBinding binding;
@@ -77,12 +79,11 @@ public class ProfileActivity extends AppCompatActivity {
                 emailText.setText(email);
                 Map<String, Map<String, String>> map =
                         (Map<String, Map<String, String>>) snapshot.child("reviews").getValue();
+                TreeMap<String, Map<String, String>> orderedMap = new TreeMap<>(map);
                 if (map != null) {
-
-
-                    for (String key : map.keySet()) {
-                        Review item = createListItem(email, key, map.get(key).get("review"),
-                                map.get(key).get("rating"), map.get(key).get("location"));
+                    for (String key : orderedMap.keySet()) {
+                        Review item = createListItem(email, key, orderedMap.get(key).get("review"),
+                                orderedMap.get(key).get("rating"), orderedMap.get(key).get("location"));
                         boolean getOut = false;
                         for (Review review : reviews) {
                             if (review.getDate().equals(item.getDate())) {
@@ -113,6 +114,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     private Review createListItem(String username, String timestamp, String review, String rating, String location) {
         Date date = new Date(Long.parseLong(timestamp));
+        if (rating == null) {
+            rating = "3.0";
+        }
         Review reviewItem = new Review(review, date.toLocaleString(), location, decodeEmail(username), Float.parseFloat(rating));
         return reviewItem;
     }
