@@ -84,18 +84,21 @@ public class FeedFragment extends Fragment {
                 ViewGroup card = (ViewGroup) v.getParent();
                 for (int itemPos = 0; itemPos < card.getChildCount(); itemPos++) {
                     View view = card.getChildAt(itemPos);
-                    if (view instanceof Button) {
+                    if (view.getId() == R.id.downvote_button) {
                         down = (Button) view;
                         break;
                     }
                 }
                 if (upvotes.contains(voter)) {
                     upvotes.remove(voter);
+                    up.setBackgroundColor(Color.parseColor("#8AB557"));
                 } else {
                     ref.child(timestamp).child(location).child(encodeEmail(user)).child("likes").child(voter).setValue(true);
                     upvotes.add(voter);
+                    up.setBackgroundColor(Color.parseColor("#3C5E15"));
                 }
                 downvotes.remove(voter);
+                down.setBackgroundColor(Color.parseColor("#CF8080"));
                 ref.child(timestamp).child(location).child(encodeEmail(user)).child("dislikes").child(voter).setValue(false);
                 up.setText(String.valueOf(upvotes.size()));
                 down.setText(String.valueOf(downvotes.size()));
@@ -117,17 +120,20 @@ public class FeedFragment extends Fragment {
                 ViewGroup card = (ViewGroup) v.getParent();
                 for (int itemPos = 0; itemPos < card.getChildCount(); itemPos++) {
                     View view = card.getChildAt(itemPos);
-                    if (view instanceof Button) {
+                    if (view.getId() == R.id.upvote_button) {
                         up = (Button) view;
                         break;
                     }
                 }
                 if (downvotes.contains(voter)) {
                     downvotes.remove(voter);
+                    down.setBackgroundColor(Color.parseColor("#CF8080"));
                 } else {
                     ref.child(timestamp).child(location).child(encodeEmail(user)).child("dislikes").child(voter).setValue(true);
                     downvotes.add(voter);
+                    down.setBackgroundColor(Color.parseColor("#BA3636"));
                 }
+                up.setBackgroundColor(Color.parseColor("#8AB557"));
                 upvotes.remove(voter);
                 ref.child(timestamp).child(location).child(encodeEmail(user)).child("likes").child(voter).setValue(false);
                 up.setText(String.valueOf(upvotes.size()));
