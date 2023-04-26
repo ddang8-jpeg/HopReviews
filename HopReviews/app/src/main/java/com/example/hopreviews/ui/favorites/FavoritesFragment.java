@@ -65,6 +65,11 @@ public class FavoritesFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String location = snapshot.getKey();
+                if (!snapshot.getValue(Boolean.class)) {
+                    String item = createListItem(location);
+                    favorites.remove(item);
+                }
                 adapter.notifyDataSetChanged();
             }
 

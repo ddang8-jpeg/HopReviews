@@ -1,6 +1,7 @@
 package com.example.hopreviews;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +49,11 @@ private ActivityMainBinding binding;
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.signout) {
+            SharedPreferences sp = getSharedPreferences("rememberMe", MODE_PRIVATE);
+            sp.getBoolean("rememberMe", false);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean("rememberMe", false);
+            editor.apply();
             this.finish();
             return true;
         }

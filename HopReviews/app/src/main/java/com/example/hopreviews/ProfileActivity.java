@@ -79,8 +79,8 @@ public class ProfileActivity extends AppCompatActivity {
                 emailText.setText(email);
                 Map<String, Map<String, String>> map =
                         (Map<String, Map<String, String>>) snapshot.child("reviews").getValue();
-                TreeMap<String, Map<String, String>> orderedMap = new TreeMap<>(map);
                 if (map != null) {
+                    TreeMap<String, Map<String, String>> orderedMap = new TreeMap<>(map);
                     for (String key : orderedMap.keySet()) {
                         Review item = createListItem(email, key, orderedMap.get(key).get("review"),
                                 orderedMap.get(key).get("rating"), orderedMap.get(key).get("location"));
@@ -159,6 +159,5 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
     }
 }
