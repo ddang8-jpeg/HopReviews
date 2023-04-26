@@ -27,6 +27,8 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/upvote_button"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:layout_conversion_absoluteHeight="19dp"
@@ -36,27 +38,25 @@
                 android:id="@+id/downvote_button"
                 android:layout_width="75dp"
                 android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
                 app:backgroundTint="#CF8080"
                 app:icon="@drawable/baseline_arrow_downward_24"
                 app:iconPadding="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.85"
-                app:layout_constraintStart_toEndOf="@+id/location_votable"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/upvote_button"
                 android:layout_width="75dp"
                 android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
                 android:text=""
                 app:backgroundTint="#8AB557"
                 app:icon="@drawable/baseline_arrow_upward_24"
                 app:iconPadding="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/downvote_button"
-                app:layout_constraintHorizontal_bias="0.93"
-                app:layout_constraintStart_toEndOf="@+id/location_votable"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

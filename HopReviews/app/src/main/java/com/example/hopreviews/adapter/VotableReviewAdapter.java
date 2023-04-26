@@ -1,6 +1,8 @@
 package com.example.hopreviews.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,6 +88,14 @@ public class VotableReviewAdapter extends RecyclerView.Adapter<VotableReviewAdap
         holder.userRating.setNumStars(5);
         holder.upvote.setText(String.valueOf(item.getUpvotes().size()));
         holder.downvote.setText(String.valueOf(item.getDownvotes().size()));
+        SharedPreferences sp = context.getSharedPreferences("email", Context.MODE_PRIVATE);
+        String requester = sp.getString("email", "");
+        if (item.getUpvotes().contains(encodeEmail(requester))) {
+            holder.upvote.setBackgroundColor(Color.parseColor("#3C5E15"));
+        }
+        if (item.getDownvotes().contains(encodeEmail(requester))) {
+            holder.downvote.setBackgroundColor(Color.parseColor("#BA3636"));
+        }
     }
     @Override
     public int getItemCount() {
@@ -94,6 +104,12 @@ public class VotableReviewAdapter extends RecyclerView.Adapter<VotableReviewAdap
 
     public VotableReview getItem(int position) {
         return dataset.get(position % getItemCount());
+    }
+
+    private String encodeEmail(String str) {
+        str = str.replaceAll("@", "-");
+        str = str.replaceAll("\\.", "_");
+        return str;
     }
 
     public interface ClickListener {

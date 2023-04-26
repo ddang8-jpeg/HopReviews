@@ -89,6 +89,8 @@ public class FeedFragment extends Fragment {
                         break;
                     }
                 }
+                downvotes.remove(voter);
+                down.setBackgroundColor(Color.parseColor("#CF8080"));
                 if (upvotes.contains(voter)) {
                     upvotes.remove(voter);
                     up.setBackgroundColor(Color.parseColor("#8AB557"));
@@ -97,8 +99,6 @@ public class FeedFragment extends Fragment {
                     upvotes.add(voter);
                     up.setBackgroundColor(Color.parseColor("#3C5E15"));
                 }
-                downvotes.remove(voter);
-                down.setBackgroundColor(Color.parseColor("#CF8080"));
                 ref.child(timestamp).child(location).child(encodeEmail(user)).child("dislikes").child(voter).setValue(false);
                 up.setText(String.valueOf(upvotes.size()));
                 down.setText(String.valueOf(downvotes.size()));
@@ -125,6 +125,8 @@ public class FeedFragment extends Fragment {
                         break;
                     }
                 }
+                up.setBackgroundColor(Color.parseColor("#8AB557"));
+                upvotes.remove(voter);
                 if (downvotes.contains(voter)) {
                     downvotes.remove(voter);
                     down.setBackgroundColor(Color.parseColor("#CF8080"));
@@ -133,8 +135,6 @@ public class FeedFragment extends Fragment {
                     downvotes.add(voter);
                     down.setBackgroundColor(Color.parseColor("#BA3636"));
                 }
-                up.setBackgroundColor(Color.parseColor("#8AB557"));
-                upvotes.remove(voter);
                 ref.child(timestamp).child(location).child(encodeEmail(user)).child("likes").child(voter).setValue(false);
                 up.setText(String.valueOf(upvotes.size()));
                 down.setText(String.valueOf(downvotes.size()));
