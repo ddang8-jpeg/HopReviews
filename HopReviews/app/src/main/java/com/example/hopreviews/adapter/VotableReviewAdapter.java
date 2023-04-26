@@ -93,7 +93,7 @@ public class VotableReviewAdapter extends RecyclerView.Adapter<VotableReviewAdap
     }
 
     public VotableReview getItem(int position) {
-        return dataset.get(position);
+        return dataset.get(position % getItemCount());
     }
 
     public interface ClickListener {

@@ -2,6 +2,7 @@ package com.example.hopreviews.ui.feed;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -77,17 +79,24 @@ public class FeedFragment extends Fragment {
                 String voter = encodeEmail(getActivity()
                                 .getSharedPreferences("email",
                                         Context.MODE_PRIVATE).getString("email", ""));
-                ref.child(timestamp).child(location).child(encodeEmail(user)).child("likes").child(voter).setValue(true);
-                ref.child(timestamp).child(location).child(encodeEmail(user)).child("dislikes").child(voter).setValue(false);
                 Button up = v.findViewById(R.id.upvote_button);
-                Button down = v.getRootView().findViewById(R.id.downvote_button);
+                Button down = null;
+                ViewGroup card = (ViewGroup) v.getParent();
+                for (int itemPos = 0; itemPos < card.getChildCount(); itemPos++) {
+                    View view = card.getChildAt(itemPos);
+                    if (view instanceof Button) {
+                        down = (Button) view;
+                        break;
+                    }
+                }
                 if (upvotes.contains(voter)) {
                     upvotes.remove(voter);
-                    downvotes.remove(voter);
                 } else {
+                    ref.child(timestamp).child(location).child(encodeEmail(user)).child("likes").child(voter).setValue(true);
                     upvotes.add(voter);
-                    downvotes.remove(voter);
                 }
+                downvotes.remove(voter);
+                ref.child(timestamp).child(location).child(encodeEmail(user)).child("dislikes").child(voter).setValue(false);
                 up.setText(String.valueOf(upvotes.size()));
                 down.setText(String.valueOf(downvotes.size()));
             }
@@ -103,17 +112,24 @@ public class FeedFragment extends Fragment {
                 String voter = encodeEmail(getActivity()
                         .getSharedPreferences("email",
                                 Context.MODE_PRIVATE).getString("email", ""));
-                ref.child(timestamp).child(location).child(encodeEmail(user)).child("dislikes").child(voter).setValue(true);
-                ref.child(timestamp).child(location).child(encodeEmail(user)).child("likes").child(voter).setValue(false);
-                Button up = v.getRootView().findViewById(R.id.upvote_button);
+                Button up = null;
                 Button down = v.findViewById(R.id.downvote_button);
+                ViewGroup card = (ViewGroup) v.getParent();
+                for (int itemPos = 0; itemPos < card.getChildCount(); itemPos++) {
+                    View view = card.getChildAt(itemPos);
+                    if (view instanceof Button) {
+                        up = (Button) view;
+                        break;
+                    }
+                }
                 if (downvotes.contains(voter)) {
                     downvotes.remove(voter);
-                    upvotes.remove(voter);
                 } else {
+                    ref.child(timestamp).child(location).child(encodeEmail(user)).child("dislikes").child(voter).setValue(true);
                     downvotes.add(voter);
-                    upvotes.remove(voter);
                 }
+                upvotes.remove(voter);
+                ref.child(timestamp).child(location).child(encodeEmail(user)).child("likes").child(voter).setValue(false);
                 up.setText(String.valueOf(upvotes.size()));
                 down.setText(String.valueOf(downvotes.size()));
             }

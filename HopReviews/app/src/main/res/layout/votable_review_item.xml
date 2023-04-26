@@ -50,7 +50,7 @@
                 android:layout_width="75dp"
                 android:layout_height="40dp"
                 android:text=""
-                app:backgroundTint="#447010"
+                app:backgroundTint="#6A8F3E"
                 app:icon="@drawable/baseline_arrow_upward_24"
                 app:iconPadding="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
