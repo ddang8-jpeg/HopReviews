@@ -1,9 +1,13 @@
 # TeamD-HopReviews
 
-Log in Information:
+### Log in Information:
 
 User: smodare1@jhu.edu Password: 123456
+
 User: mchakra9@jhu.edu Password: xxxxxxxx
+
+User:bluejay@jhu.edu Password: 123456
+
 
 Please note that due to the nature of emulators, their location is automatically 
 at GooglePlex in California. You need to change the location manually by going to
