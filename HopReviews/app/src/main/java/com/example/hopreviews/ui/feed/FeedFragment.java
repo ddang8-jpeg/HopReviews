@@ -84,7 +84,7 @@ public class FeedFragment extends Fragment {
                 if (upvotes.contains(voter)) {
                     ref.child(timestamp).child(location).child(encodeEmail(user)).child("likes").child(voter).setValue(false);
                     upvotes.remove(voter);
-                    up.setBackgroundColor(Color.parseColor("#8AB557"));
+                    up.setBackgroundColor(Color.parseColor("#A2D368"));
                 } else {
                     ref.child(timestamp).child(location).child(encodeEmail(user)).child("likes").child(voter).setValue(true);
                     upvotes.add(voter);
@@ -118,16 +118,6 @@ public class FeedFragment extends Fragment {
                                 Context.MODE_PRIVATE).getString("email", ""));
                 Button up = null;
                 Button down = v.findViewById(R.id.downvote_button);
-                ViewGroup card = (ViewGroup) v.getParent();
-                for (int itemPos = 0; itemPos < card.getChildCount(); itemPos++) {
-                    View view = card.getChildAt(itemPos);
-                    if (view.getId() == R.id.upvote_button) {
-                        up = (Button) view;
-                        break;
-                    }
-                }
-                up.setBackgroundColor(Color.parseColor("#8AB557"));
-                upvotes.remove(voter);
                 if (downvotes.contains(voter)) {
                     ref.child(timestamp).child(location).child(encodeEmail(user)).child("dislikes").child(voter).setValue(false);
                     downvotes.remove(voter);
@@ -138,6 +128,16 @@ public class FeedFragment extends Fragment {
                     down.setBackgroundColor(Color.parseColor("#BA3636"));
                 }
                 ref.child(timestamp).child(location).child(encodeEmail(user)).child("likes").child(voter).setValue(false);
+                ViewGroup card = (ViewGroup) v.getParent();
+                for (int itemPos = 0; itemPos < card.getChildCount(); itemPos++) {
+                    View view = card.getChildAt(itemPos);
+                    if (view.getId() == R.id.upvote_button) {
+                        up = (Button) view;
+                        break;
+                    }
+                }
+                up.setBackgroundColor(Color.parseColor("#A2D368"));
+                upvotes.remove(voter);
                 up.setText(String.valueOf(upvotes.size()));
                 down.setText(String.valueOf(downvotes.size()));
             }

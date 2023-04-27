@@ -52,7 +52,7 @@
                 android:layout_height="40dp"
                 android:layout_marginEnd="8dp"
                 android:text=""
-                app:backgroundTint="#8AB557"
+                app:backgroundTint="#A2D368"
                 app:icon="@drawable/baseline_arrow_upward_24"
                 app:iconPadding="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
