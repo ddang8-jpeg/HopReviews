@@ -21,6 +21,8 @@ emulator is capable of doing so. Many emulators with APIs less than 30 do not al
 users to open or even access the Photos app! Any attempt to open the photos app will
 crash the emulator.
 
+Due to the social media nature of our app, users may not use it in horizontal orientation.
+
 ## Sprint 2
 We implemented all the promised/required features for sprint 2 and even more! These features include:
 - Populate the feed list for all of the users from the database
