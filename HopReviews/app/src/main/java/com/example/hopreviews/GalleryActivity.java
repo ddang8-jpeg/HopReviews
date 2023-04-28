@@ -35,7 +35,6 @@ public class GalleryActivity extends AppCompatActivity {
         ItemAdapter images = new ItemAdapter(getApplicationContext(), imageList);
         RecyclerView recyclerView = binding.recyclerView;
 
-
         ref.child(getIntent().getStringExtra("name")).child("images").listAll()
                 .addOnSuccessListener(listResult -> {
                     for (StorageReference file: listResult.getItems()) {

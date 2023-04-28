@@ -285,7 +285,7 @@ public class LocationActivity extends AppCompatActivity {
        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 1) {
            return;
-       } else if (resultCode == 0) {
+       } else if (resultCode == 10) {
             String username = data.getStringExtra("username");
             String newTime = data.getStringExtra("timestamp");
             String newReview = data.getStringExtra("newlyadded");

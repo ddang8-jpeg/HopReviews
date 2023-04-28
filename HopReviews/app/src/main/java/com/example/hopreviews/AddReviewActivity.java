@@ -77,7 +77,7 @@ public class AddReviewActivity extends AppCompatActivity {
             intent.putExtra("newlyadded", review);
             intent.putExtra("timestamp", timestamp);
             intent.putExtra("rating", rating);
-            setResult(0, intent);
+            setResult(10, intent);
             if (photo != null) {
                 storageReference.child(getIntent().getStringExtra("name")).child("images/" + photo.getLastPathSegment()).putFile(photo);
             }
