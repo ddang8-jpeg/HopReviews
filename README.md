@@ -1,12 +1,13 @@
-# TeamD-HopReviews
+# HopReviews
+
+Surveys indicated that Hopkins students desired and perferred to view reviews from other Hopkins students. Hopreviews is an android app that allows Hopkins student view, like, and review Hopkins specific locations such as the BLC and Hopkins Cafe and popular locations around Hopkins campus. 
 
 ### Log in Information:
 
 User: smodare1@jhu.edu Password: 123456
-
 User: mchakra9@jhu.edu Password: xxxxxxxx
-
 User:bluejay@jhu.edu Password: 123456
+
 
 
 Please note that due to the nature of emulators, their location is automatically 
