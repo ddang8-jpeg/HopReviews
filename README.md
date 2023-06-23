@@ -5,7 +5,9 @@ Surveys indicated that Hopkins students desired and perferred to view reviews fr
 ### Log in Information:
 
 User: smodare1@jhu.edu Password: 123456
+
 User: mchakra9@jhu.edu Password: xxxxxxxx
+
 User:bluejay@jhu.edu Password: 123456
 
 
